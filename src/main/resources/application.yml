@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: LogisticProject
+
+  security:
+    jwt:
+      secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 2365
+    url: jdbc:postgresql://localhost:5432/logistic
+
+  liquibase:
+    change-log: db/changelog/changelogMaster.xml
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+server:
+  port: 8081

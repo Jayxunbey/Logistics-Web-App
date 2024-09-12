@@ -1,0 +1,192 @@
+CREATE TABLE "order_history_road_transport"(
+    "id" bigserial NOT NULL,
+    "order_history_id" BIGINT NOT NULL,
+    "road_transport_id" INTEGER NOT NULL,
+    "transport_price" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "order_history_road_transport" ADD PRIMARY KEY("id");
+
+CREATE TABLE "order_history"(
+    "id" bigserial NOT NULL,
+    "payment_type_id" INTEGER NOT NULL,
+    "who_pays_id" INTEGER NOT NULL,
+    "cargo_type_id" INTEGER NOT NULL,
+    "phone" VARCHAR(255) NOT NULL,
+    "lading_time" DATE NOT NULL,
+    "created_date" DATE NOT NULL,
+    "price" VARCHAR(255) NOT NULL,
+    "status_id" INTEGER NOT NULL,
+    "partial_percent" INTEGER NOT NULL
+);
+ALTER TABLE
+    "order_history" ADD PRIMARY KEY("id");
+
+
+CREATE TABLE "transport_type"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "transport_type" ADD PRIMARY KEY("id");
+
+CREATE TABLE "cargo_type"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "cargo_type" ADD PRIMARY KEY("id");
+
+CREATE TABLE "region"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "region" ADD PRIMARY KEY("id");
+
+CREATE TABLE "road_transport"(
+    "id" SERIAL NOT NULL,
+    "road_id" INTEGER NOT NULL,
+    "transport_id" INTEGER NOT NULL,
+    "active" BOOLEAN NOT NULL,
+    "price" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "road_transport" ADD PRIMARY KEY("id");
+
+CREATE TABLE "road_beetwen_region"(
+    "id" SERIAL NOT NULL,
+    "first_address_id" INTEGER NOT NULL,
+    "second_address_id" INTEGER NOT NULL,
+    "active" BOOLEAN NOT NULL
+);
+ALTER TABLE
+    "road_beetwen_region" ADD PRIMARY KEY("id");
+
+CREATE TABLE "order"(
+    "id" VARCHAR(255) NOT NULL,
+    "payment_type_id" INTEGER NOT NULL,
+    "who_pays_id" INTEGER NOT NULL,
+    "cargo_type_id" INTEGER NOT NULL,
+    "phone" VARCHAR(255) NOT NULL,
+    "lading_time" DATE NOT NULL,
+    "comment" VARCHAR(255) NOT NULL,
+    "created_date" DATE NOT NULL,
+    "calculated_price" VARCHAR(255) NOT NULL,
+    "suggested_price" VARCHAR(255) NOT NULL,
+    "status_id" INTEGER NOT NULL,
+    "partial_percent" INTEGER NOT NULL
+);
+ALTER TABLE
+    "order" ADD PRIMARY KEY("id");
+
+CREATE TABLE "attachment"(
+    "id" VARCHAR(255) NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "extension" VARCHAR(255) NOT NULL,
+    "path" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "attachment" ADD PRIMARY KEY("id");
+
+CREATE TABLE "order_status"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "order_status" ADD PRIMARY KEY("id");
+
+CREATE TABLE "payment_type"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL,
+    "active" BOOLEAN NOT NULL
+);
+ALTER TABLE
+    "payment_type" ADD PRIMARY KEY("id");
+
+CREATE TABLE "transport"(
+    "id" SERIAL NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "type_id" INTEGER NOT NULL,
+    "max_capasity" INTEGER NOT NULL,
+    "length" DECIMAL(8, 2) NOT NULL,
+    "height" DECIMAL(8, 2) NOT NULL,
+    "width" DECIMAL(8, 2) NOT NULL,
+    "photo_attachment_id" VARCHAR(255) NULL,
+    "active" BOOLEAN NOT NULL,
+    "can_be_fully" BOOLEAN NOT NULL,
+    "can_be_partially" BOOLEAN NOT NULL
+);
+
+ALTER TABLE
+    "transport" ADD PRIMARY KEY("id");
+
+
+CREATE TABLE "users"(
+    "id" bigserial NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
+    "phone" VARCHAR(255) NULL,
+    "password" VARCHAR(255) NOT NULL,
+    "active" BOOLEAN NOT NULL,
+    "photo_attachment_id" VARCHAR(255) NULL,
+    "registrated_time" DATE NOT NULL
+);
+
+ALTER TABLE
+    "users" ADD PRIMARY KEY("id");
+CREATE TABLE "order_road_transport"(
+    "id" BIGINT NOT NULL,
+    "order_id" VARCHAR(255) NOT NULL,
+    "road_transport_id" INTEGER NOT NULL,
+    "transport_price" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "order_road_transport" ADD PRIMARY KEY("id");
+
+
+CREATE TABLE "who_pays"(
+    "id" SERIAL NOT NULL,
+    "name_en" VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    "who_pays" ADD PRIMARY KEY("id");
+
+
+ALTER TABLE
+    "order_history_road_transport" ADD CONSTRAINT "order_history_road_transport_order_history_id_foreign" FOREIGN KEY("order_history_id") REFERENCES "order_history"("id");
+ALTER TABLE
+    "order_history" ADD CONSTRAINT "order_history_cargo_type_id_foreign" FOREIGN KEY("cargo_type_id") REFERENCES "cargo_type"("id");
+ALTER TABLE
+    "transport" ADD CONSTRAINT "transport_photo_attachment_id_foreign" FOREIGN KEY("photo_attachment_id") REFERENCES "attachment"("id");
+ALTER TABLE
+    "road_transport" ADD CONSTRAINT "road_transport_transport_id_foreign" FOREIGN KEY("transport_id") REFERENCES "transport"("id");
+ALTER TABLE
+    "road_beetwen_region" ADD CONSTRAINT "road_beetwen_region_first_address_id_foreign" FOREIGN KEY("first_address_id") REFERENCES "region"("id");
+ALTER TABLE
+    "order_history" ADD CONSTRAINT "order_history_status_id_foreign" FOREIGN KEY("status_id") REFERENCES "order_status"("id");
+ALTER TABLE
+    "transport" ADD CONSTRAINT "transport_type_id_foreign" FOREIGN KEY("type_id") REFERENCES "transport_type"("id");
+ALTER TABLE
+    "users" ADD CONSTRAINT "users_photo_attachment_id_foreign" FOREIGN KEY("photo_attachment_id") REFERENCES "attachment"("id");
+ALTER TABLE
+    "order_road_transport" ADD CONSTRAINT "order_road_transport_order_id_foreign" FOREIGN KEY("order_id") REFERENCES "order"("id");
+ALTER TABLE
+    "order" ADD CONSTRAINT "order_cargo_type_id_foreign" FOREIGN KEY("cargo_type_id") REFERENCES "cargo_type"("id");
+ALTER TABLE
+    "order_road_transport" ADD CONSTRAINT "order_road_transport_road_transport_id_foreign" FOREIGN KEY("road_transport_id") REFERENCES "road_transport"("id");
+ALTER TABLE
+    "order" ADD CONSTRAINT "order_payment_type_id_foreign" FOREIGN KEY("payment_type_id") REFERENCES "payment_type"("id");
+ALTER TABLE
+    "order_history_road_transport" ADD CONSTRAINT "order_history_road_transport_road_transport_id_foreign" FOREIGN KEY("road_transport_id") REFERENCES "road_transport"("id");
+ALTER TABLE
+    "order_history" ADD CONSTRAINT "order_history_payment_type_id_foreign" FOREIGN KEY("payment_type_id") REFERENCES "payment_type"("id");
+ALTER TABLE
+    "order" ADD CONSTRAINT "order_status_id_foreign" FOREIGN KEY("status_id") REFERENCES "order_status"("id");
+ALTER TABLE
+    "order_history" ADD CONSTRAINT "order_history_who_pays_id_foreign" FOREIGN KEY("who_pays_id") REFERENCES "who_pays"("id");
+ALTER TABLE
+    "order" ADD CONSTRAINT "order_who_pays_id_foreign" FOREIGN KEY("who_pays_id") REFERENCES "who_pays"("id");
+ALTER TABLE
+    "road_beetwen_region" ADD CONSTRAINT "road_beetwen_region_second_address_id_foreign" FOREIGN KEY("second_address_id") REFERENCES "region"("id");
+ALTER TABLE
+    "road_transport" ADD CONSTRAINT "road_transport_road_id_foreign" FOREIGN KEY("road_id") REFERENCES "road_beetwen_region"("id");
