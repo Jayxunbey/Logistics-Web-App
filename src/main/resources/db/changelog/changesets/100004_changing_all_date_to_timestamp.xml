@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="100004-1" author="jayxunbey">
+        <sql>
+
+
+
+            alter table users alter column registrated_time set data type timestamp;
+
+            alter table "order" alter column lading_time set data type timestamp;
+            alter table "order" alter column created_date set data type timestamp;
+
+            alter table "order_history" alter column lading_time set data type timestamp;
+            alter table "order_history" alter column created_date set data type timestamp;
+
+
+
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

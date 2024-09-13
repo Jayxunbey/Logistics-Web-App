@@ -7,7 +7,7 @@
     <changeSet id="100003-1" author="jayxunbey">
         <sql>
             alter table "order"
-                add column user_id integer not null;
+                add column user_id BIGINT not null;
 
             ALTER TABLE
                 "order"
@@ -21,7 +21,7 @@
 
     <sql>
         alter table "order_history"
-        add column user_id integer not null;
+        add column user_id BIGINT not null;
 
         ALTER TABLE
         "order_history"
