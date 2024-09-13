@@ -23,9 +23,14 @@ public class RegionService {
         }
 
         Region newRegion = new Region();
+
         newRegion.setNameEn(region.getNameEn());
         regionRepository.save(newRegion);
 
     }
+
+//    public void search(String text) {
+//        regionRepository.fin
+//    }
 }
 

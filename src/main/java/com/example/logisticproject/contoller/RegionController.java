@@ -4,10 +4,7 @@ import com.example.logisticproject.dto.req.region.RegionAddReqDto;
 import com.example.logisticproject.service.RegionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/region")
@@ -25,6 +22,13 @@ public class RegionController {
         regionService.add(region);
 
         return ResponseEntity.ok().build();
+
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public void searchRegion(@RequestParam String text) {
+
+//        regionService.search(text);
 
     }
 
