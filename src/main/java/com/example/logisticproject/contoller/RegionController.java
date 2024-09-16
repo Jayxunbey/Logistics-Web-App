@@ -28,7 +28,7 @@ public class RegionController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public void searchRegion(@RequestParam String text) {
 
-//        regionService.search(text);
+        regionService.search(text);
 
     }
 

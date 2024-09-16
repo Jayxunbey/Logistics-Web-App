@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface RegionRepository extends JpaRepository<Region, Integer> {
 
     @Query(value = "select * from public.region r where upper(r.name_en) = upper(?1)",nativeQuery = true)
-    Optional<Region> findByNameEnIgnoreCase( String nameEn);
+    Optional<Region> findByNameEnIgnoreCase(String nameEn);
 
 }
