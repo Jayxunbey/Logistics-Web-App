@@ -37,7 +37,7 @@ public class PaymentTypeService {
         return paymentTypeRepository.findAll();
     }
 
-//    public List<PaymentType> getAll() {
-////        paymentTypeRepository.find
-//    }
+    public List<PaymentType> getAll() {
+        return paymentTypeRepository.findActiveIsTrue();
+    }
 }

@@ -36,10 +36,10 @@ public class PaymentTypeController {
         return ResponseEntity.ok(paymentTypeService.getAllWithOutActive());
     }
 
-//    @RequestMapping(value = "/all", method = RequestMethod.GET)
-//    public ResponseEntity<List<PaymentType>> getAll() {
-////        return ResponseEntity.ok(paymentTypeService.getAll());
-//    }
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity<List<PaymentType>> getAll() {
+        return ResponseEntity.ok(paymentTypeService.getAll());
+    }
 
 
 }
