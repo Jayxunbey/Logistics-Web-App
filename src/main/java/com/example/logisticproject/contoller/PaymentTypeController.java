@@ -1,7 +1,9 @@
 package com.example.logisticproject.contoller;
 
 import com.example.logisticproject.dto.req.paymenttype.PaymentTypeAddReqDto;
+import com.example.logisticproject.dto.req.paymenttype.PaymentTypeEditActiveReqDto;
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
+import com.example.logisticproject.dto.resp.paymenttype.PaymentTypeRespDto;
 import com.example.logisticproject.entity.PaymentType;
 import com.example.logisticproject.service.PaymentTypeService;
 import com.example.logisticproject.service.RegionService;
@@ -37,8 +39,13 @@ public class PaymentTypeController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<PaymentType>> getAll() {
+    public ResponseEntity<List<PaymentTypeRespDto>> getAll() {
         return ResponseEntity.ok(paymentTypeService.getAll());
+    }
+
+    @RequestMapping(value = "/edit-active", method = RequestMethod.POST)
+    public ResponseEntity<PaymentType> editActive(@RequestBody @Validated PaymentTypeEditActiveReqDto paymentTypeEditActiveReqDto) {
+        return ResponseEntity.ok(paymentTypeService.editActive(paymentTypeEditActiveReqDto));
     }
 
 
