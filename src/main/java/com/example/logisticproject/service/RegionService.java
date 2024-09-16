@@ -5,6 +5,7 @@ import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.repo.RegionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,8 +30,9 @@ public class RegionService {
 
     }
 
-    public void search(String text) {
-//        regionRepository.
+    public List<Region> search(String text) {
+        return regionRepository.searchBy(text);
     }
+
 }
 
