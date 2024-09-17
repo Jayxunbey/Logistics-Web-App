@@ -29,16 +29,16 @@ public class RegionController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam String text) {
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam String region) {
 
-        List<Region> searched = regionService.search(text);
+        List<Region> searched = regionService.search(region);
 
         return ResponseEntity.ok(searched);
 
     }
 
-    @RequestMapping(value = "/search-without-text", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "text") String text, @RequestParam("except-text") String exceptedText) {
+    @RequestMapping(value = "/search-without-region", method = RequestMethod.GET)
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String text, @RequestParam("except-region") String exceptedText) {
 
         List<Region> searched = regionService.search(text);
 

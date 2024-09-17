@@ -31,6 +31,9 @@ public class RegionService {
     }
 
     public List<Region> search(String text) {
+        if (text == null || text.isEmpty()) {
+            return List.of();
+        }
         return regionRepository.searchBy(text);
     }
 
