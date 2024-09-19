@@ -37,5 +37,20 @@ public class RegionService {
         return regionRepository.searchBy(text);
     }
 
+    public List<Region> searchWithoutId(String text, Integer exceptedRegionId) {
+
+        if (text == null || text.isEmpty()) {
+            return List.of();
+        }
+
+        if (exceptedRegionId == null) {
+            throw new RuntimeException("Excepted region id is null");
+        }
+
+        List<Region> regions = regionRepository.searchWithoutId(text, exceptedRegionId);
+
+        return regions;
+    }
+
 }
 

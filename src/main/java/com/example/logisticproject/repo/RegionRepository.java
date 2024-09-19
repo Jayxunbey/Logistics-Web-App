@@ -19,5 +19,7 @@ public interface RegionRepository extends JpaRepository<Region, Integer> {
             value = "select * from public.region where name_en ilike concat('%',:text,'%')")
     List<Region> searchBy(@Param("text") String text);
 
+    @Query(nativeQuery = true, value = "select * from public.region r where r.name_en ilike concat('%',?,'%') and r.id <> ?")
+    List<Region> searchWithoutId(String nameEn, Integer id);
 
 }

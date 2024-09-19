@@ -38,9 +38,9 @@ public class RegionController {
     }
 
     @RequestMapping(value = "/search-without-region", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String text, @RequestParam("except-region") String exceptedText) {
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String text, @RequestParam("except-region-id") Integer exceptedRegionId) {
 
-        List<Region> searched = regionService.search(text);
+        List<Region> searched = regionService.searchWithoutId(text,exceptedRegionId);
 
         return ResponseEntity.ok(searched);
 
