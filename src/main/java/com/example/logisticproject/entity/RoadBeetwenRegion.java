@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @Entity
-@Table(name = "road_beetwen_region")
+@Table(name = "road_between_region")
 public class RoadBeetwenRegion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +19,13 @@ public class RoadBeetwenRegion {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "first_address_id", nullable = false)
-    private Region firstAddress;
+    @JoinColumn(name = "from_address_id", nullable = false)
+    private Region fromAddress;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "second_address_id", nullable = false)
-    private Region secondAddress;
+    @JoinColumn(name = "to_address_id", nullable = false)
+    private Region toAddress;
 
     @NotNull
     @Column(name = "active", nullable = false)

@@ -9,8 +9,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 2365
-    url: jdbc:postgresql://localhost:5432/test5
+    password: 123
+    url: jdbc:postgresql://localhost:5432/logistic
 
   liquibase:
     change-log: db/changelog/changelogMaster.xml
