@@ -5,6 +5,7 @@ import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.repo.RegionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,11 @@ public class RegionService {
 
         List<Region> regions = regionRepository.searchWithoutId(text, exceptedRegionId);
 
-        return regions;
+        List<Region> result = new ArrayList<>();
+
+        regions.stream().limit(4).forEach(result::add);
+
+        return result;
     }
 
 }
