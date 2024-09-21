@@ -38,8 +38,11 @@ public class RoadTransport {
     private String price;
 
     @NotNull
-    @Column(name = "has_opposite_direction", nullable = false)
-    private Boolean hasOppositeDirection;
+    @Column(name = "is_directional", nullable = false)
+    private Boolean isDirectional;
 
+    @NotNull
+    @Column(name = "is_bilateral", nullable = false)
+    private Boolean isBilateral;
 
 }
