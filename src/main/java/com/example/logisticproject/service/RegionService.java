@@ -58,11 +58,13 @@ public class RegionService {
         return result;
     }
 
-    public void checkRegion(@NotNull Integer fromAddressId) {
+    public Region checkRegion(@NotNull Integer fromAddressId) {
         Optional<Region> byId = regionRepository.findById(fromAddressId);
         if (byId.isEmpty()){
             throw new RuntimeException("Region not found");
         }
+
+        return byId.get();
 
     }
 }
