@@ -2,7 +2,9 @@ package com.example.logisticproject.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -10,7 +12,9 @@ import org.hibernate.annotations.ColumnDefault;
 @Setter
 @Entity
 @Table(name = "road_between_region")
-public class RoadBeetwenRegion {
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoadBetweenRegion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('road_beetwen_region_id_seq')")
