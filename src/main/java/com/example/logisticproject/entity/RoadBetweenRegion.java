@@ -22,12 +22,12 @@ public class RoadBetweenRegion {
     private Integer id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "from_address_id", nullable = false)
     private Region fromAddress;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "to_address_id", nullable = false)
     private Region toAddress;
 

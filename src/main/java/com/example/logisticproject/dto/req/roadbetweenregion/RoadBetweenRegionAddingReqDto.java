@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class RoadBeetwenRegionAddingReqDto implements Serializable {
+public class RoadBetweenRegionAddingReqDto implements Serializable {
     @NotNull
     @JsonProperty(required = true, value = "from_address_id")
     Integer fromAddressId;
