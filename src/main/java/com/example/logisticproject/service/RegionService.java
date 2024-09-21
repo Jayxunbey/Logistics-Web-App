@@ -3,6 +3,7 @@ package com.example.logisticproject.service;
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
 import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.repo.RegionRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -57,5 +58,12 @@ public class RegionService {
         return result;
     }
 
+    public void checkRegion(@NotNull Integer fromAddressId) {
+        Optional<Region> byId = regionRepository.findById(fromAddressId);
+        if (byId.isEmpty()){
+            throw new RuntimeException("Region not found");
+        }
+
+    }
 }
 
