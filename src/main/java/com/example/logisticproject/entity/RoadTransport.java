@@ -21,7 +21,7 @@ public class RoadTransport {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "road_id", nullable = false)
-    private RoadBeetwenRegion road;
+    private RoadBetweenRegion road;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -36,5 +36,13 @@ public class RoadTransport {
     @NotNull
     @Column(name = "price", nullable = false)
     private String price;
+
+    @NotNull
+    @Column(name = "is_directional", nullable = false)
+    private Boolean isDirectional;
+
+    @NotNull
+    @Column(name = "is_bilateral", nullable = false)
+    private Boolean isBilateral;
 
 }

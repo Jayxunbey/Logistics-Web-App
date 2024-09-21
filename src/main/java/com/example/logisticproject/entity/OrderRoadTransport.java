@@ -31,4 +31,8 @@ public class OrderRoadTransport {
     @Column(name = "transport_price", nullable = false)
     private String transportPrice;
 
+    @NotNull
+    @Column(name = "is_directional", nullable = false)
+    private Boolean isDirectional;
+
 }

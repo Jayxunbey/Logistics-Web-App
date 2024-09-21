@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="100005-1" author="jayxunbey">
+        <sql>
+
+            alter table road_beetwen_region rename to road_between_region;
+
+        </sql>
+
+    </changeSet>
+    <changeSet id="100005-2" author="Jayxunbey">
+        <sql>
+
+            alter table road_between_region rename column first_address_id  to from_address_id;
+            alter table road_between_region rename column second_address_id  to to_address_id;
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
