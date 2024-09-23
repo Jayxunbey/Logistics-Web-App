@@ -6,6 +6,11 @@ import com.example.logisticproject.entity.CargoType;
 import com.example.logisticproject.entity.TransportType;
 import com.example.logisticproject.service.CargoTypeService;
 import com.example.logisticproject.service.TransportTypeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +31,15 @@ public class TransportTypeController {
         this.transportTypeService = transportTypeService;
     }
 
+
+    @Operation(summary = "Add a new type of Transport", description = "Allows the user to add a new type of Transport")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "A new type of Transport successfully added",
+                    content = @Content(mediaType = "application/json")
+            )
+    })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<Object> add(@RequestBody @Validated TransportTypeAddReqDto transportTypeAddReqDto ){
 
@@ -35,6 +49,14 @@ public class TransportTypeController {
 
     }
 
+    @Operation(summary = "Get all types of transport", description = "Allows the user to get all types of transport")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "All types of transport sent successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(type = "array", implementation = TransportType.class))
+            )
+    })
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseEntity<List<TransportType>> getAll( ){
 
