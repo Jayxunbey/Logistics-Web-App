@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
+
 public class AttachmentService {
 
     private static final Logger log = LoggerFactory.getLogger(AttachmentService.class);
@@ -33,6 +35,7 @@ public class AttachmentService {
     private boolean ifNotExistSaveDefaultDirectory;
 
 
+    @Transactional
     public void upload(MultipartFile file) {
 
         if (file.isEmpty()) {
@@ -48,6 +51,8 @@ public class AttachmentService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
 
 
 
