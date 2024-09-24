@@ -49,6 +49,8 @@ public class AttachmentService {
             throw new RuntimeException(e);
         }
 
+
+
     }
 
     private DirectoryDetailsForSavingBetweenMethodsDto checkDirectoryAndOtherAndGetObjAboutPath(MultipartFile file) {
@@ -94,6 +96,8 @@ public class AttachmentService {
         String fullPath = baseDirectoryPath + File.separator + "logistic" + File.separator + "photos" + File.separator + getFileBodyNameForSaving(file, directoryDetails);
 
         directoryDetails.setFullPath(fullPath);
+
+
 
         return directoryDetails;
 
