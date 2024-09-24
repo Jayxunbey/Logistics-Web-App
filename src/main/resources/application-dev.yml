@@ -31,6 +31,12 @@ spring:
       username: default
       password: TXzv3SVINsKslylW624NmktBl5F6sqfQ
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 50MB
+      enabled: true
+
 server:
   port: 8081
 

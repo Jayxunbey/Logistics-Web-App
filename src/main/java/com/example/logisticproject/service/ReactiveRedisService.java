@@ -5,6 +5,8 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @Service
 public class ReactiveRedisService {
 
@@ -15,7 +17,7 @@ public class ReactiveRedisService {
     }
 
     public Mono<Boolean> saveData(String key, String value) {
-        return reactiveRedisTemplate.opsForValue().set(key, value);
+        return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofMinutes(1));
     }
 
     public Mono<String> getData(String key) {
