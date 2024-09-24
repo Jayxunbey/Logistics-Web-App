@@ -42,5 +42,13 @@ server:
 
 
 file:
-  base-path: D://Projects/resource/pho5tos
+  saving:
+    default-directory:
+      is-enabled: true
+
+    base-directory:
+      path: D://Projects/resource/pho5tos
+      if-dont-exist-the-directory-create: true
+      if-cannot-access-the-directory-use-default-directory: true
+
 
