@@ -30,4 +30,8 @@ public class Attachment {
     @Column(name = "path", nullable = false)
     private String path;
 
+    @NotNull
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
 }

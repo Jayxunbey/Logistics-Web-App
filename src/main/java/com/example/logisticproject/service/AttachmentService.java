@@ -19,6 +19,7 @@ import java.util.UUID;
 public class AttachmentService {
 
     private static final Logger log = LoggerFactory.getLogger(AttachmentService.class);
+    private final ReactiveRedisService reactiveRedisService;
 
     @Value("${file.saving.base-directory.path}")
     private String userDir;
@@ -37,8 +38,9 @@ public class AttachmentService {
     private boolean ifNotExistSaveDefaultDirectory;
     private final AttachmentRepository attachmentRepository;
 
-    public AttachmentService(AttachmentRepository attachmentRepository) {
+    public AttachmentService(AttachmentRepository attachmentRepository, ReactiveRedisService reactiveRedisService) {
         this.attachmentRepository = attachmentRepository;
+        this.reactiveRedisService = reactiveRedisService;
     }
 
 
@@ -61,6 +63,8 @@ public class AttachmentService {
 
         savingToDatabase(savedFileDetails);
 
+        reactiveRedisService.savePhotoData(savedFileDetails.getFileName());
+
         return savedFileDetails.getFileName();
 
 
@@ -70,7 +74,9 @@ public class AttachmentService {
         attachmentRepository.save(new Attachment(
                 savedFileDetails.getFileName(),
                 savedFileDetails.getFileExtension(),
-                savedFileDetails.getFullPath()));
+                savedFileDetails.getFullPath(),
+                false)
+        );
 
 
     }

@@ -1,26 +1,34 @@
 package com.example.logisticproject.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.aspectj.weaver.tools.cache.CacheKeyResolver;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 
 @Service
 public class ReactiveRedisService {
 
-    private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 
-    public ReactiveRedisService(ReactiveRedisTemplate<String, String> reactiveRedisTemplate) {
+    private final ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
+
+    public ReactiveRedisService(ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate) {
         this.reactiveRedisTemplate = reactiveRedisTemplate;
     }
 
-    public Mono<Boolean> saveData(String key, String value) {
-        return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofMinutes(1));
+
+    @Cacheable(cacheNames = "photos", key = "#key", unless = "#result==false")
+    public boolean getPhotoData(String key) {
+
+
+        if (reactiveRedisTemplate.opsForValue().get(key).block() == null) {
+            return false;
+        } else return true;
     }
 
-    public Mono<String> getData(String key) {
-        return reactiveRedisTemplate.opsForValue().get(key);
+
+    @Cacheable(cacheNames = "photos", key = "#photoId")
+    public boolean savePhotoData(String photoId) {
+        return true;
     }
 }
