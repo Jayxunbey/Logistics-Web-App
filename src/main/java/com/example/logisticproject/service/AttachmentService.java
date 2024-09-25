@@ -1,6 +1,8 @@
 package com.example.logisticproject.service;
 
 import com.example.logisticproject.dto.between.DirectoryDetailsForSavingBetweenMethodsDto;
+import com.example.logisticproject.entity.Attachment;
+import com.example.logisticproject.repo.AttachmentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,41 +21,56 @@ public class AttachmentService {
     private static final Logger log = LoggerFactory.getLogger(AttachmentService.class);
 
     @Value("${file.saving.base-directory.path}")
-    private String baseDirectoryPath;
+    private String userDir;
 
-    @Value("${file.saving.base-directory.if-cannot-access-the-directory-use-default-directory}")
+    @Value("${file.saving.base-directory.if-cannot-access-the-directory-use-default-directory:false}")
     private boolean ifcannotAccessTheDirectoryUseDefaultDirectory;
 
-    @Value("${file.saving.base-directory.if-dont-exist-the-directory-create}")
+    @Value("${file.saving.base-directory.if-dont-exist-the-directory-create:false}")
     private boolean ifdontExistTheDirectoryCreate;
 
-    @Value("${file.saving.default-directory.is-enabled}")
+    @Value("${file.saving.default-directory.is-enabled:false}")
     private boolean defaultDirectoryIsEnabled;
 
 
     @Value("${file.saving.base-directory.if-cant-save-use-default-directory:false}")
     private boolean ifNotExistSaveDefaultDirectory;
+    private final AttachmentRepository attachmentRepository;
+
+    public AttachmentService(AttachmentRepository attachmentRepository) {
+        this.attachmentRepository = attachmentRepository;
+    }
 
 
     @Transactional
-    public void upload(MultipartFile file) {
+    public String upload(MultipartFile file) {
 
         if (file.isEmpty()) {
             throw new RuntimeException("File is empty");
         }
 
 
-        var directoryAndOtherAndGetObjAboutPath = checkDirectoryAndOtherAndGetObjAboutPath(file);
+        var savedFileDetails = checkDirectoryAndOtherAndGetObjAboutPath(file);
 
 
         try {
-            file.transferTo(new File(directoryAndOtherAndGetObjAboutPath.getFullPath()));
+            file.transferTo(new File(savedFileDetails.getFullPath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+        savingToDatabase(savedFileDetails);
+
+        return savedFileDetails.getFileName();
 
 
+    }
+
+    private void savingToDatabase(DirectoryDetailsForSavingBetweenMethodsDto savedFileDetails) {
+        attachmentRepository.save(new Attachment(
+                savedFileDetails.getFileName(),
+                savedFileDetails.getFileExtension(),
+                savedFileDetails.getFullPath()));
 
 
     }
@@ -68,7 +85,7 @@ public class AttachmentService {
             return connectToDefaultDirectory(file, directoryDetails);
         } else {
 
-            if (baseDirectoryPath == null || baseDirectoryPath.isBlank()) {
+            if (userDir == null || userDir.isBlank()) {
 
                 if (ifcannotAccessTheDirectoryUseDefaultDirectory) {
                     return connectToDefaultDirectory(file, directoryDetails);
@@ -79,15 +96,16 @@ public class AttachmentService {
 
             } else {
 
-                if (!checkIsAvailablePath(baseDirectoryPath)) {
+                if (!checkIsAvailablePath(userDir)) {
                     if (ifdontExistTheDirectoryCreate) {
-                        createPath(baseDirectoryPath);
+                        createPath(userDir);
+                    } else {
+                        log.info("is not available directory");
+                        throw new RuntimeException("Cannot save");
                     }
-                    log.info("is not available directory");
-                    throw new RuntimeException("Cannot save");
                 }
 
-                fullPath = baseDirectoryPath + (!baseDirectoryPath.endsWith(File.separator) ? File.separator : "") + getFileBodyNameForSaving(file, directoryDetails);
+                fullPath = userDir + (!userDir.endsWith(File.separator) ? File.separator : "") + getFileBodyNameForSaving(file, directoryDetails);
                 directoryDetails.setFullPath(fullPath);
                 return directoryDetails;
 
@@ -96,13 +114,17 @@ public class AttachmentService {
     }
 
     private DirectoryDetailsForSavingBetweenMethodsDto connectToDefaultDirectory(MultipartFile file, DirectoryDetailsForSavingBetweenMethodsDto directoryDetails) {
-        baseDirectoryPath = System.getProperty("user.dir");
+        userDir = System.getProperty("user.dir");
 
-        String fullPath = baseDirectoryPath + File.separator + "logistic" + File.separator + "photos" + File.separator + getFileBodyNameForSaving(file, directoryDetails);
+        String baseDirectory = userDir + File.separator + "logistic" + File.separator + "photos";
+
+        if (!checkIsAvailablePath(baseDirectory)) {
+            createPath(baseDirectory);
+        }
+
+        String fullPath = baseDirectory + File.separator + getFileBodyNameForSaving(file, directoryDetails);
 
         directoryDetails.setFullPath(fullPath);
-
-
 
         return directoryDetails;
 

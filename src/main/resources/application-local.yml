@@ -44,10 +44,10 @@ server:
 file:
   saving:
     default-directory:
-      is-enabled: true
+#      is-enabled: true
 
     base-directory:
-      path: D://Projects/resource/pho5tos
+      path: D:\Projects\resource\logistic\photos
       if-dont-exist-the-directory-create: true
       if-cannot-access-the-directory-use-default-directory: true
 

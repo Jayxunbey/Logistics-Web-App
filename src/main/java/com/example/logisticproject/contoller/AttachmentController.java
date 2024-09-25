@@ -20,16 +20,12 @@ public class AttachmentController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void add(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> add(@RequestParam("file") MultipartFile file) {
 
-        attachmentService.upload(file);
+        String fileId = attachmentService.upload(file);
 
+        return ResponseEntity.ok(fileId);
 
-
-
-
-
-        
 
     }
 
