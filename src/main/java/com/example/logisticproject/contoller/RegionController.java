@@ -1,6 +1,7 @@
 package com.example.logisticproject.contoller;
 
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
+import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.service.RegionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/region")
+@RequestMapping("/api/region")
 public class RegionController {
 
     private final RegionService regionService;
@@ -70,5 +71,29 @@ public class RegionController {
         return ResponseEntity.ok(searched);
 
     }
+
+    @Operation(summary = "Get all regions", description = "Allows the user to get the data of all regions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of all regions ",
+                    content = @Content(mediaType = "application/json", schema = @Schema(type = "array", implementation = RegionResponse.class))
+            )
+    })
+    @GetMapping
+    public List<RegionResponse> getAll() {
+        return regionService.getAll();
+    }
+
+
+    @Operation(summary = "Update the region", description = "Allows the user to update the data of region")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Region update",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = RegionResponse.class))
+            )
+    })
+    @PutMapping("/{regionId}")
+    public RegionResponse update(@PathVariable(name = "regionId") int id, @RequestBody @Validated RegionAddReqDto update) {
+        return regionService.update(id, update);
+    }
+
 
 }
