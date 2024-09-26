@@ -1,6 +1,6 @@
 package com.example.logisticproject.service;
 
-import com.example.logisticproject.contoller.exception.DataNotFoundException;
+import com.example.logisticproject.contoller.exception.RegionNameAlreadyExistsException;
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
 import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.entity.Region;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +31,7 @@ public class RegionService {
     public void add(RegionAddReqDto region) {
         Optional<Region> byNameEnIgnoreCase = regionRepository.findByNameEnIgnoreCase(region.getNameEn());
         if (byNameEnIgnoreCase.isPresent()) {
-            throw new RuntimeException("Name already exists");
+            throw new RegionNameAlreadyExistsException(region.getNameEn());
         }
 
         Region newRegion = new Region();
@@ -88,7 +87,7 @@ public class RegionService {
     }
 
     public Region findById(Integer id) {
-        return regionRepository.findById(id).orElseThrow(() -> new DataNotFoundException(String.format("Region with id %s not found", id)));
+        return regionRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format("Region with id %s not found", id)));
     }
 
     public RegionResponse update(int id, RegionAddReqDto update) {
