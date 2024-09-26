@@ -20,7 +20,7 @@ public class Region {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "name_en", nullable = false)
+    @Column(name = "name_en", nullable = false, unique = true)
     private String nameEn;
 
 }

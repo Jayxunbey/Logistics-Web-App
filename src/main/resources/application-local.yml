@@ -13,7 +13,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 2365
+    password: 1255
     url: jdbc:postgresql://localhost:5432/logistic
 
   liquibase:
@@ -56,4 +56,6 @@ file:
       if-dont-exist-the-directory-create: true
       if-cannot-access-the-directory-use-default-directory: true
 
-
+springdoc:
+  swagger-ui:
+    path: /swagger
