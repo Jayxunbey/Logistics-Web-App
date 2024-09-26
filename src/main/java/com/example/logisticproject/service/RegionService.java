@@ -1,6 +1,6 @@
 package com.example.logisticproject.service;
 
-import com.example.logisticproject.contoller.exception.RegionNameAlreadyExistsException;
+import com.example.logisticproject.exceptions.classes.common.RegionNameAlreadyExistsException;
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
 import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.entity.Region;
