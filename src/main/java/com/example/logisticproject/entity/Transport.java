@@ -35,16 +35,16 @@ public class Transport {
     private Integer maxCapasity;
 
     @NotNull
-    @Column(name = "length", nullable = false, precision = 8, scale = 2)
-    private BigDecimal length;
+    @Column(name = "length", nullable = false)
+    private Double length;
 
     @NotNull
-    @Column(name = "height", nullable = false, precision = 8, scale = 2)
-    private BigDecimal height;
+    @Column(name = "height", nullable = false)
+    private Double height;
 
     @NotNull
-    @Column(name = "width", nullable = false, precision = 8, scale = 2)
-    private BigDecimal width;
+    @Column(name = "width", nullable = false)
+    private Double width;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_attachment_id")

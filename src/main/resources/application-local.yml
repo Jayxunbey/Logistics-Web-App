@@ -13,7 +13,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 1255
+    password: 2365
     url: jdbc:postgresql://localhost:5432/logistic
 
   liquibase:
@@ -49,7 +49,7 @@ server:
 file:
   saving:
     default-directory:
-    #          is-enabled: true
+#              is-enabled: true
 
     base-directory:
       path: D:\Projects\resource\logistic\photos

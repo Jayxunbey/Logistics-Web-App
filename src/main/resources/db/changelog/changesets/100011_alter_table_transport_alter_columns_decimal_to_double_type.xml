@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1000011-1" author="jayxunbey">
+
+        <sql>
+            alter table transport alter column length set data type double precision;
+            alter table transport alter column height set data type double precision;
+            alter table transport alter column width set data type double precision;
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>
