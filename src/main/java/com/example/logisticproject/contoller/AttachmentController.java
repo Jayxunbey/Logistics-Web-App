@@ -25,28 +25,17 @@ public class AttachmentController {
 
         String fileId = attachmentService.upload(file);
 
-        return ResponseEntity.ok(Map.of("id",fileId));
+        return ResponseEntity.ok(Map.of("id", fileId));
 
 
     }
 
 
+    @RequestMapping("/notice-about-living-connection")
+    public ResponseEntity<Map<String, Object>> noticeAboutStaying(@RequestParam("id") String key) {
 
-    @RequestMapping("/check-is-available")
-    public ResponseEntity<Map<String, Object>> noticeAboutStaying(@RequestParam("id" ) String key) {
-        Object jay = reactiveRedisService.getPhotoData(key);
-        return ResponseEntity.ok(Map.of("status",jay));
+        return ResponseEntity.ok(Map.of("status", attachmentService.noticeAboutLivingConnection(key)));
 
     }
-
-//
-//    @RequestMapping(value = "/get",method = RequestMethod.GET)
-//    public ResponseEntity<Object> get(@RequestParam("key" ) String key) {
-//
-//
-//
-//        return ResponseEntity.ok(jay);
-//
-//    }
 
 }

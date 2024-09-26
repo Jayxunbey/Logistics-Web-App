@@ -42,11 +42,15 @@ spring:
 server:
   port: 8081
 
+scheduling:
+  tasks:
+    auto-clear-false-attachment-with-checking-from-caching-on-minute: 1
+
 
 file:
   saving:
     default-directory:
-    #      is-enabled: true
+#          is-enabled: true
 
     base-directory:
       path: D:\Projects\resource\logistic\photos

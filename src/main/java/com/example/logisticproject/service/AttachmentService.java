@@ -1,17 +1,22 @@
 package com.example.logisticproject.service;
 
+import com.example.logisticproject.contoller.AttachmentController;
 import com.example.logisticproject.dto.between.DirectoryDetailsForSavingBetweenMethodsDto;
 import com.example.logisticproject.entity.Attachment;
 import com.example.logisticproject.repo.AttachmentRepository;
+import org.hibernate.annotations.processing.Suppress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +25,7 @@ public class AttachmentService {
 
     private static final Logger log = LoggerFactory.getLogger(AttachmentService.class);
     private final ReactiveRedisService reactiveRedisService;
+    private final RedisCacheManager redisCacheManager;
 
     @Value("${file.saving.base-directory.path}")
     private String userDir;
@@ -38,9 +44,10 @@ public class AttachmentService {
     private boolean ifNotExistSaveDefaultDirectory;
     private final AttachmentRepository attachmentRepository;
 
-    public AttachmentService(AttachmentRepository attachmentRepository, ReactiveRedisService reactiveRedisService) {
+    public AttachmentService(AttachmentRepository attachmentRepository, ReactiveRedisService reactiveRedisService, @Qualifier("redisCacheManager") RedisCacheManager redisCacheManager) {
         this.attachmentRepository = attachmentRepository;
         this.reactiveRedisService = reactiveRedisService;
+        this.redisCacheManager = redisCacheManager;
     }
 
 
@@ -161,5 +168,41 @@ public class AttachmentService {
             return false;
         }
         return true;
+    }
+
+    public List<Attachment> getAllWhichActiveFalse() {
+        return attachmentRepository.findAllActiveFalse();
+    }
+
+    public void deleteById(String id) {
+        attachmentRepository.deleteById(id);
+    }
+
+    public void deleteFileByFullPath(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            if (file.delete()) {
+                log.info("Deleted file: " + path);
+            } else {
+                log.info("Failed to delete file: " + path);
+            }
+        } else {
+            log.info("File does not exist: " + path);
+        }
+    }
+
+    @SuppressWarnings(value = {"all"})
+    public boolean noticeAboutLivingConnection(String key) {
+        boolean jay = reactiveRedisService.getPhotoData(key);
+
+        if (jay) {
+            redisCacheManager.getCache("photos").evict(key);
+
+            reactiveRedisService.savePhotoData(key);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }
