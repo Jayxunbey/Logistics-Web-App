@@ -18,8 +18,7 @@ public class ReactiveRedisService {
 
 
     @Cacheable(cacheNames = "photos", key = "#key", unless = "#result==false")
-    public boolean getPhotoData(String key) {
-
+    public synchronized boolean getPhotoData(String key) {
 
         if (reactiveRedisTemplate.opsForValue().get(key).block() == null) {
             return false;
