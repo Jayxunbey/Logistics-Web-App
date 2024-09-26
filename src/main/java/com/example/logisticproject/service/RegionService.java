@@ -1,22 +1,32 @@
 package com.example.logisticproject.service;
 
+import com.example.logisticproject.contoller.exception.DataNotFoundException;
 import com.example.logisticproject.dto.req.region.RegionAddReqDto;
+import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.repo.RegionRepository;
 import jakarta.validation.constraints.NotNull;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RegionService {
 
     private final RegionRepository regionRepository;
+    private final ModelMapper modelMapper;
 
-    public RegionService(RegionRepository regionRepository) {
+    public RegionService(RegionRepository regionRepository, ModelMapper modelMapper) {
         this.regionRepository = regionRepository;
+        this.modelMapper = modelMapper;
     }
 
     public void add(RegionAddReqDto region) {
@@ -66,6 +76,25 @@ public class RegionService {
 
         return byId.get();
 
+    }
+
+    public List<RegionResponse> getAll() {
+        return regionRepository.findAll().stream().map(e -> modelMapper.map(e, RegionResponse.class)).collect(Collectors.toList());
+    }
+
+    public Page<RegionResponse> getAsPage(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+        return regionRepository.findAll(pageable).map(e -> modelMapper.map(e, RegionResponse.class));
+    }
+
+    public Region findById(Integer id) {
+        return regionRepository.findById(id).orElseThrow(() -> new DataNotFoundException(String.format("Region with id %s not found", id)));
+    }
+
+    public RegionResponse update(int id, RegionAddReqDto update) {
+        Region region = findById(id);
+        region.setNameEn(update.getNameEn());
+        return modelMapper.map(regionRepository.save(region), RegionResponse.class);
     }
 }
 

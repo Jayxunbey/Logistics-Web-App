@@ -5,6 +5,11 @@ import com.example.logisticproject.dto.req.roadbetweenregion.RoadBetweenRegionCh
 import com.example.logisticproject.dto.resp.roadbetweenregion.RoadBetweenRegionPaginationRespDto;
 import com.example.logisticproject.entity.RoadBetweenRegion;
 import com.example.logisticproject.service.RoadBetweenRegionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +26,8 @@ public class RoadBetweenRegionController {
         this.roadBetweenRegionService = roadBetweenRegionService;
     }
 
+
+    @Operation(summary = "Add a RoadBetweenRegion", description = "Allows the user to add a new RoadBetweenRegion")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void add(@RequestBody @Validated RoadBetweenRegionAddingReqDto roadBetweenRegionAddingReqDto){
 
@@ -28,6 +35,7 @@ public class RoadBetweenRegionController {
 
     }
 
+    @Operation(summary = "Change isActive status of the RoadBetweenRegion")
     @RequestMapping(value = "/change-active", method = RequestMethod.POST)
     public void changeActive(@RequestBody @Validated RoadBetweenRegionChangeActiveReqDto roadBetweenRegionChangeActiveReqDto){
 
@@ -35,6 +43,15 @@ public class RoadBetweenRegionController {
 
     }
 
+
+    @Operation(summary = "Get RoadBetweenRegion as a page", description = "Allows the user to get RoadBetweenRegion as a page")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "RoadBetweenRegion successfully sent",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = RoadBetweenRegionPaginationRespDto.class))
+            )
+    })
     @RequestMapping(value = "/get-as-page", method = RequestMethod.GET)
     public ResponseEntity<RoadBetweenRegionPaginationRespDto> changeActive(@RequestParam Integer page, @RequestParam Integer size){
 

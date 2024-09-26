@@ -1,0 +1,59 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  application:
+    name: LogisticProject
+
+  security:
+    jwt:
+      secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 2365
+    url: jdbc:postgresql://localhost:5432/logistic
+
+  liquibase:
+    change-log: db/changelog/changelogMaster.xml
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+      caching:
+        auto-delete-time-at-minute: 1
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 1000MB
+      enabled: true
+
+scheduling:
+  tasks:
+    auto-clear-false-attachment-with-checking-from-caching-on-minute: 1
+
+server:
+  port: 8081
+
+file:
+  saving:
+    default-directory:
+    #          is-enabled: true
+
+    base-directory:
+      path: D:\Projects\resource\logistic\photos
+      if-dont-exist-the-directory-create: true
+      if-cannot-access-the-directory-use-default-directory: true
+
+
