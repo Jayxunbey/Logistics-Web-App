@@ -28,8 +28,8 @@ spring:
     redis:
       host: localhost
       port: 6379
-      username: default
-      password: TXzv3SVINsKslylW624NmktBl5F6sqfQ
+
+
       caching:
         auto-delete-time-at-minute: 1
 
@@ -39,18 +39,17 @@ spring:
       max-request-size: 1000MB
       enabled: true
 
-server:
-  port: 8081
-
 scheduling:
   tasks:
     auto-clear-false-attachment-with-checking-from-caching-on-minute: 1
 
+server:
+  port: 8081
 
 file:
   saving:
     default-directory:
-#          is-enabled: true
+    #          is-enabled: true
 
     base-directory:
       path: D:\Projects\resource\logistic\photos

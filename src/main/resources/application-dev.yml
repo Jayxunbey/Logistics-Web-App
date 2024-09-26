@@ -30,6 +30,8 @@ spring:
       port: 10089
       username: default
       password: TXzv3SVINsKslylW624NmktBl5F6sqfQ
+      caching:
+        auto-delete-time-at-minute: 1
 
   servlet:
     multipart:
@@ -37,8 +39,21 @@ spring:
       max-request-size: 50MB
       enabled: true
 
+scheduling:
+  tasks:
+    auto-clear-false-attachment-with-checking-from-caching-on-minute: 1
 
 
 server:
   port: 8081
+
+file:
+  saving:
+    default-directory:
+      is-enabled: true
+
+    base-directory:
+      path: D:\Projects\resource\logistic\photos
+      if-dont-exist-the-directory-create: true
+      if-cannot-access-the-directory-use-default-directory: true
 
