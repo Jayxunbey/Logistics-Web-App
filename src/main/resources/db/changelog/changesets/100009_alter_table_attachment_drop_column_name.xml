@@ -4,10 +4,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="100007-1" author="jayxunbey">
+    <changeSet id="100009-1" author="jayxunbey">
 
         <sql>
-            alter table order_road_transport add column is_directional boolean not null;
+            alter table attachment drop column name
         </sql>
 
     </changeSet>

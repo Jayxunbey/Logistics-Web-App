@@ -4,6 +4,7 @@ import com.example.logisticproject.dto.req.transporttype.TransportTypeAddReqDto;
 import com.example.logisticproject.entity.CargoType;
 import com.example.logisticproject.entity.TransportType;
 import com.example.logisticproject.repo.TransportTypeRepository;
+import jakarta.validation.constraints.NotNull;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,11 @@ public class TransportTypeService {
 
     public List<TransportType> getAll() {
         return transportTypeRepository.findAll();
+    }
+
+    public void checkIsExists(@NotNull Integer transportTypeId) {
+        if (!transportTypeRepository.existsById(transportTypeId)) {
+            throw new RuntimeException("Transport type does not exist");
+        }
     }
 }

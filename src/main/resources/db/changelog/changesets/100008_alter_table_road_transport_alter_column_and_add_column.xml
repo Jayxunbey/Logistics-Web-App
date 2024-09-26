@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="100005-1" author="jayxunbey">
+    <changeSet id="100008-1" author="jayxunbey">
 
         <sql>
             alter table road_transport rename column has_opposite_direction to is_directional;
