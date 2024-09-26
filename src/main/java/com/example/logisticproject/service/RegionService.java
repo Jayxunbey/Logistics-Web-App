@@ -7,6 +7,9 @@ import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.repo.RegionRepository;
 import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -77,6 +80,11 @@ public class RegionService {
 
     public List<RegionResponse> getAll() {
         return regionRepository.findAll().stream().map(e -> modelMapper.map(e, RegionResponse.class)).collect(Collectors.toList());
+    }
+
+    public Page<RegionResponse> getAsPage(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+        return regionRepository.findAll(pageable).map(e -> modelMapper.map(e, RegionResponse.class));
     }
 
     public Region findById(Integer id) {
