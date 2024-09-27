@@ -32,7 +32,7 @@ public class Transport {
 
     @NotNull
     @Column(name = "max_capasity", nullable = false)
-    private Integer maxCapasity;
+    private Integer maxCapacity;
 
     @NotNull
     @Column(name = "length", nullable = false)

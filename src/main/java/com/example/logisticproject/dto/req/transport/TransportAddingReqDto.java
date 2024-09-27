@@ -32,6 +32,7 @@ public class TransportAddingReqDto implements Serializable {
     @NotNull
     @JsonProperty("max_capacity")
     Integer maxCapacity;
+
     @NotNull
     Double length;
     @NotNull

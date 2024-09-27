@@ -214,4 +214,10 @@ public class AttachmentService {
 
         throw new AttachmentNotFoundException();
     }
+
+    public void activationFile(String id) {
+        if (attachmentRepository.updateActiveByIdAndActiveFalse(id,true)<1) {
+            throw new AttachmentNotFoundException();
+        }
+    }
 }
