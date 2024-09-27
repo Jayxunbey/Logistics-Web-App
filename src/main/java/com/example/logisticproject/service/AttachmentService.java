@@ -1,10 +1,9 @@
 package com.example.logisticproject.service;
 
-import com.example.logisticproject.contoller.AttachmentController;
 import com.example.logisticproject.dto.between.DirectoryDetailsForSavingBetweenMethodsDto;
 import com.example.logisticproject.entity.Attachment;
+import com.example.logisticproject.exceptions.classes.common.AttachmentNotFoundException;
 import com.example.logisticproject.repo.AttachmentRepository;
-import org.hibernate.annotations.processing.Suppress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -203,6 +203,21 @@ public class AttachmentService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public Attachment getByIdWhichActiveFalse(String id) {
+        Optional<Attachment> oneByIdWhichActiveFalse = attachmentRepository.findOneByIdWhichActiveFalse(id);
+        if (oneByIdWhichActiveFalse.isPresent()) {
+            return oneByIdWhichActiveFalse.get();
+        }
+
+        throw new AttachmentNotFoundException();
+    }
+
+    public void activationFile(String id) {
+        if (attachmentRepository.updateActiveByIdAndActiveFalse(id,true)<1) {
+            throw new AttachmentNotFoundException();
         }
     }
 }

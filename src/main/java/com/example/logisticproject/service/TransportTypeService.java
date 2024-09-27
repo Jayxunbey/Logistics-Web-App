@@ -3,6 +3,7 @@ package com.example.logisticproject.service;
 import com.example.logisticproject.dto.req.transporttype.TransportTypeAddReqDto;
 import com.example.logisticproject.entity.CargoType;
 import com.example.logisticproject.entity.TransportType;
+import com.example.logisticproject.exceptions.classes.common.TransportNotFoundException;
 import com.example.logisticproject.repo.TransportTypeRepository;
 import jakarta.validation.constraints.NotNull;
 import org.apache.coyote.BadRequestException;
@@ -44,9 +45,13 @@ public class TransportTypeService {
         return transportTypeRepository.findAll();
     }
 
-    public void checkIsExists(@NotNull Integer transportTypeId) {
-        if (!transportTypeRepository.existsById(transportTypeId)) {
-            throw new RuntimeException("Transport type does not exist");
+    public TransportType checkIsExists(@NotNull Integer transportTypeId) {
+        Optional<TransportType> byId = transportTypeRepository.findById(transportTypeId);
+        if (byId.isPresent()) {
+            return byId.get();
         }
+
+        throw new TransportNotFoundException();
+
     }
 }
