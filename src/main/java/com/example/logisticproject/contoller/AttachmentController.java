@@ -20,7 +20,7 @@ public class AttachmentController {
         this.attachmentService = attachmentService;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = "multipart/form-data")
     public ResponseEntity<Map<String, String>> add(@RequestParam("file") MultipartFile file) {
 
         String fileId = attachmentService.upload(file);
@@ -31,7 +31,7 @@ public class AttachmentController {
     }
 
 
-    @RequestMapping("/notice-about-living-connection")
+    @RequestMapping(value = "/notice-about-living-connection",method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> noticeAboutStaying(@RequestParam("id") String key) {
 
         return ResponseEntity.ok(Map.of("status", attachmentService.noticeAboutLivingConnection(key)));
