@@ -40,14 +40,15 @@ public class TransportService {
 
         System.out.println("transportAddingReqDto = " + transportAddingReqDto);
 
-        Attachment photo = attachmentService.getByIdWhichActiveFalse(transportAddingReqDto.getPhotoId());
-
-        attachmentService.activationFile(photo.getId());
-
         Transport entity = transportMapper.toEntity(transportAddingReqDto);
-
-        entity.setPhotoAttachment(photo);
         entity.setType(transportType);
+
+        if (transportAddingReqDto.getPhotoId() != null && !transportAddingReqDto.getPhotoId().isEmpty()) {
+
+            Attachment photo = attachmentService.getByIdWhichActiveFalse(transportAddingReqDto.getPhotoId());
+            attachmentService.activationFile(photo.getId());
+            entity.setPhotoAttachment(photo);
+        }
 
         transportRepository.save(entity);
 

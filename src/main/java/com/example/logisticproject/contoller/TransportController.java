@@ -35,10 +35,10 @@ public class TransportController {
                     content = @Content(mediaType = "application/json", schema = @Schema(type = "array", implementation = TransportController.class))
             )
     })
-    @GetMapping
+    @GetMapping("/page")
     public ResponseEntity<Page<TransportResponse>> getAll(
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize
+            @RequestParam(defaultValue = "1",name = "page_number") int pageNo,
+            @RequestParam(defaultValue = "10",name = "page_size") int pageSize
     ) {
         return ResponseEntity.ok(transportService.getAsPage(pageNo-1, pageSize));
     }
