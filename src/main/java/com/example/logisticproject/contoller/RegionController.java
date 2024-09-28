@@ -49,9 +49,9 @@ public class RegionController {
                             content = @Content(mediaType = "application/json", schema = @Schema(type = "array", implementation = Region.class))),
     })
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam String region) {
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam String name) {
 
-        List<Region> searched = regionService.search(region);
+        List<Region> searched = regionService.search(name);
 
         return ResponseEntity.ok(searched);
 
@@ -65,9 +65,9 @@ public class RegionController {
             )
     })
     @RequestMapping(value = "/search-without-region", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String text, @RequestParam("except-region-id") Integer exceptedRegionId) {
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String name, @RequestParam("except-region-id") Integer exceptedRegionId) {
 
-        List<Region> searched = regionService.searchWithoutId(text,exceptedRegionId);
+        List<Region> searched = regionService.searchWithoutId(name,exceptedRegionId);
 
         return ResponseEntity.ok(searched);
 
