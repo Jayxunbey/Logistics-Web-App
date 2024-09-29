@@ -109,4 +109,12 @@ public class RoadBetweenRegionService {
         return regions.stream().map((e) -> modelMapper.map(modelMapper.map(e, Region.class), RegionResponse.class)).collect(Collectors.toList());
 
     }
+
+    public List<RegionResponse> searchConnectedRegions(String name, Integer regionId) {
+
+        List<RegionProjection> regionProjections = roadBetweenRegionRepository.findConnectedRegionBy(name, regionId);
+
+        return regionProjections.stream().map((e) -> modelMapper.map(modelMapper.map(e, Region.class), RegionResponse.class)).collect(Collectors.toList());
+
+    }
 }

@@ -69,6 +69,15 @@ public class RoadBetweenRegionController {
 
     }
 
+    @RequestMapping(value = "/find-connected-regions", method = RequestMethod.GET)
+    public ResponseEntity<List<RegionResponse>> findConnectedRegion(@RequestParam(defaultValue = "") String name, @RequestParam(name = "region_id") Integer regionId ){
+
+        List<RegionResponse> regionResponses = roadBetweenRegionService.searchConnectedRegions(name, regionId);
+
+        return ResponseEntity.ok(regionResponses);
+
+    }
+
 
 
 

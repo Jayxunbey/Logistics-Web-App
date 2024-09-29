@@ -35,6 +35,27 @@ public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRe
                     """)
     List<RegionProjection> searchBy(@Param("text") String text);
 
+    @Query(nativeQuery = true,
+            value = """
+                    select searched.id as id, searched.name_en as nameEn
+                    from (select region.id, region.name_en
+                          from region
+
+                                   inner join (select *
+                                               from public.road_between_region rbr
+                                               where (rbr.from_address_id = :id or rbr.to_address_id = :id)) as rbr
+                                              on region.id = rbr.from_address_id or
+                                                 region.id = rbr.to_address_id
+
+                          where name_en ilike concat('%', :text, '%')
+
+                          group by region.id) as searched
+                    where searched.id != :id
+                    order by position(lower(:text) in lower(searched.name_en));
+
+                    """)
+    List<RegionProjection> findConnectedRegionBy(@Param("text") String text, @Param("id") Integer regionId);
+
     @Query(value = "select * from road_between_region order by from_address_id limit :size offset (:page-1)*:size",nativeQuery = true )
     List<RoadBetweenRegion> findAsPagination(Integer page, Integer size);
 }
