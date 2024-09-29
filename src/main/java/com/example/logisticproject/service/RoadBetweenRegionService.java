@@ -6,6 +6,7 @@ import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.dto.resp.roadbetweenregion.RoadBetweenRegionPaginationRespDto;
 import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.entity.RoadBetweenRegion;
+import com.example.logisticproject.exceptions.classes.common.RoadBetweenRegionNotFoundException;
 import com.example.logisticproject.projection.RegionProjection;
 import com.example.logisticproject.repo.RoadBetweenRegionRepository;
 import com.example.logisticproject.repo.RoadTransportRepository;
@@ -116,5 +117,13 @@ public class RoadBetweenRegionService {
 
         return regionProjections.stream().map((e) -> modelMapper.map(modelMapper.map(e, Region.class), RegionResponse.class)).collect(Collectors.toList());
 
+    }
+
+    public RoadBetweenRegion get(Integer roadFromAddressId, Integer roadToAddressId) {
+        Optional<RoadBetweenRegion> allOptions = roadBetweenRegionRepository.findAllOptions(roadFromAddressId, roadToAddressId);
+        if (allOptions.isEmpty()) {
+            throw new RoadBetweenRegionNotFoundException();
+        }
+        return allOptions.get();
     }
 }

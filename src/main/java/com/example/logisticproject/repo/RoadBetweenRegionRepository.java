@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRegion, Integer> {
 
@@ -58,4 +59,7 @@ public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRe
 
     @Query(value = "select * from road_between_region order by from_address_id limit :size offset (:page-1)*:size",nativeQuery = true )
     List<RoadBetweenRegion> findAsPagination(Integer page, Integer size);
+
+    @Query("select r from RoadBetweenRegion r where (r.fromAddress.id = ?1 and r.toAddress.id = ?2) or (r.fromAddress.id = ?2 and r.toAddress.id = ?1)")
+    Optional<RoadBetweenRegion>  findAllOptions(Integer fromId, Integer toId);
 }

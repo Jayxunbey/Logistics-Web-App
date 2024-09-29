@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -32,10 +34,9 @@ public class RoadTransport {
     @Column(name = "active", nullable = false)
     private Boolean active = false;
 
-    @Size(max = 255)
     @NotNull
-    @Column(name = "price", nullable = false)
-    private String price;
+    @Column(name = "price", nullable = false, precision = 19, scale = 5)
+    private BigDecimal price;
 
     @NotNull
     @Column(name = "is_directional", nullable = false)

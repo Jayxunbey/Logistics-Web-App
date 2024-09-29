@@ -5,6 +5,7 @@ import com.example.logisticproject.dto.req.transport.TransportAddingReqDto;
 import com.example.logisticproject.entity.Attachment;
 import com.example.logisticproject.entity.Transport;
 import com.example.logisticproject.entity.TransportType;
+import com.example.logisticproject.exceptions.classes.common.TransportNotFoundException;
 import com.example.logisticproject.mapper.TransportMapper;
 import com.example.logisticproject.repo.TransportRepository;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class TransportService {
@@ -63,5 +66,15 @@ public class TransportService {
         Page<TransportResponse> map = page.map((element) -> modelMapper.map(element, TransportResponse.class));
 
         return map;
+    }
+
+    public Transport get(Integer transportId) {
+        Optional<Transport> byId = transportRepository.findById(transportId);
+        if (byId.isEmpty()){
+            throw new TransportNotFoundException();
+        }
+
+        return byId.get();
+
     }
 }
