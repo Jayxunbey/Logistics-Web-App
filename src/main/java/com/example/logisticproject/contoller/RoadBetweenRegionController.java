@@ -2,6 +2,7 @@ package com.example.logisticproject.contoller;
 
 import com.example.logisticproject.dto.req.roadbetweenregion.RoadBetweenRegionAddingReqDto;
 import com.example.logisticproject.dto.req.roadbetweenregion.RoadBetweenRegionChangeActiveReqDto;
+import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.dto.resp.roadbetweenregion.RoadBetweenRegionPaginationRespDto;
 import com.example.logisticproject.entity.RoadBetweenRegion;
 import com.example.logisticproject.service.RoadBetweenRegionService;
@@ -58,5 +59,27 @@ public class RoadBetweenRegionController {
         return ResponseEntity.ok(roadBetweenRegionService.getAsPage(page, size));
 
     }
+
+    @RequestMapping(value = "/find-head-regions", method = RequestMethod.GET)
+    public ResponseEntity<List<RegionResponse>> findRegion(@RequestParam(defaultValue = "") String name){
+
+        List<RegionResponse> regionResponses = roadBetweenRegionService.searchByName(name);
+
+        return ResponseEntity.ok(regionResponses);
+
+    }
+
+    @RequestMapping(value = "/find-connected-regions", method = RequestMethod.GET)
+    public ResponseEntity<List<RegionResponse>> findConnectedRegion(@RequestParam(defaultValue = "") String name, @RequestParam(name = "region_id") Integer regionId ){
+
+        List<RegionResponse> regionResponses = roadBetweenRegionService.searchConnectedRegions(name, regionId);
+
+        return ResponseEntity.ok(regionResponses);
+
+    }
+
+
+
+
 
 }
