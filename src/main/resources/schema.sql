@@ -42,7 +42,7 @@ VALUES (DEFAULT, 1, 2, true),
        (DEFAULT, 20, 5, false),
        (DEFAULT, 12, 11, true),
        (DEFAULT, 5, 17, true),
-       (DEFAULT, 6, 19, false)
+       (DEFAULT, 6, 19, false);
 
 
 select region.id, region.name_en
@@ -50,3 +50,50 @@ from region
          inner join road_between_region on region.id = road_between_region.from_address_id or
                                            region.id = road_between_region.to_address_id group by region.id
 
+
+/*/////////////////////////////////////////////////////////////////////*/
+CREATE OR REPLACE FUNCTION findTransportOptions(fromId INT, toId INT, isBilateral boolean, rt road_transport,
+                                                rbr road_between_region)
+    RETURNS boolean AS
+$$
+BEGIN
+    IF rt.is_bilateral = true THEN
+        begin
+            if (rbr.from_address_id = fromId and rbr.to_address_id = toId) or
+               (rbr.from_address_id = toId and rbr.to_address_id = fromId) then
+                return true;
+            else
+                return false;
+            end if;
+        end;
+    else
+        begin
+            if isBilateral then
+                return false;
+            end if;
+
+            if rt.is_directional then
+                if rbr.from_address_id = fromId and rbr.to_address_id = toId then
+                    return true;
+                else
+                    return false;
+                end if;
+            else
+                if rbr.from_address_id = toId and rbr.to_address_id = fromId then
+                    return true;
+                else
+                    return false;
+                end if;
+            end if;
+        end;
+    end if;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+select *
+from road_transport rt
+         inner join public.road_between_region rbr on rt.road_id = rbr.id
+where findTransportOptions(10, 8, false, rt, rbr) = true
