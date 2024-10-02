@@ -1,23 +1,4 @@
-insert into public.region (name_en)
-values ('Yangiaryk'),
-       ('Yangibozor'),
-       ('Urganch'),
-       ('Qarshi'),
-       ('Turkman'),
-       ('Moskva'),
-       ('Quqan'),
-       ('Istanbul'),
-       ('Ashhabad'),
-       ('Termiz'),
-       ('Namangan'),
-       ('Andijon'),
-       ('Astana'),
-       ('Tehron'),
-       ('Bagdad'),
-       ('Islamabad'),
-       ('Pekin'),
-       ('Ulan Batar'),
-       ('Tokio');
+
 
 INSERT INTO public.road_between_region (id, from_address_id, to_address_id, active)
 VALUES (DEFAULT, 1, 2, true),
@@ -50,6 +31,11 @@ from region
          inner join road_between_region on region.id = road_between_region.from_address_id or
                                            region.id = road_between_region.to_address_id group by region.id
 
+
+select *
+from road_transport rt
+         inner join public.road_between_region rbr on rt.road_id = rbr.id
+where checkIsValidTransportOptions(10, 8, false, rt, rbr) = true
 
 /*/////////////////////////////////////////////////////////////////////*/
 CREATE OR REPLACE FUNCTION findTransportOptions(fromId INT, toId INT, isBilateral boolean, rt road_transport,
