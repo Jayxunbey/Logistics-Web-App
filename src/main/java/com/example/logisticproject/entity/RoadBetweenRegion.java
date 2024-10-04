@@ -34,5 +34,5 @@ public class RoadBetweenRegion {
 
     @NotNull
     @Column(name = "is_directional", nullable = false)
-    private Boolean is_directional = true;
+    private Boolean isDirectional = true;
 }

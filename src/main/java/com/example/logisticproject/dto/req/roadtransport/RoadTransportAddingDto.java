@@ -17,11 +17,11 @@ import java.math.BigDecimal;
 @Setter
 public class RoadTransportAddingDto {
     @NotNull
-    @JsonProperty(value = "road_from_address_id")
+    @JsonProperty(value = "from_address_id")
     Integer roadFromAddressId;
 
     @NotNull
-    @JsonProperty(value = "road_to_address_id")
+    @JsonProperty(value = "to_address_id")
     Integer roadToAddressId;
 
     @NotNull
@@ -34,4 +34,5 @@ public class RoadTransportAddingDto {
     @NotNull
     @JsonProperty(value = "is_bilateral")
     Boolean isBilateral;
+
 }
