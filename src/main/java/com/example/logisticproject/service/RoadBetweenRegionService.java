@@ -51,11 +51,11 @@ public class RoadBetweenRegionService {
 
         roadBetweenRegionDirectional.setFromAddress(fromRegion);
         roadBetweenRegionDirectional.setToAddress(toRegion);
-        roadBetweenRegionDirectional.setIs_directional(true);
+        roadBetweenRegionDirectional.setIsDirectional(true);
 
         roadBetweenRegionNotDirectional.setFromAddress(toRegion);
         roadBetweenRegionNotDirectional.setToAddress(fromRegion);
-        roadBetweenRegionNotDirectional.setIs_directional(false);
+        roadBetweenRegionNotDirectional.setIsDirectional(false);
 
         roadBetweenRegionRepository.save(roadBetweenRegionDirectional);
         roadBetweenRegionRepository.save(roadBetweenRegionNotDirectional);
