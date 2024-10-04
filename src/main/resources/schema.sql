@@ -123,3 +123,58 @@ WITH RECURSIVE RoutePaths AS (
 -- Topilgan yo'nalishlarni ko'rsatish
 SELECT rbr_sequence, city_sequence FROM RoutePaths
 where to_address_id = 3 or from_address_id = 3;
+
+
+-- //////////////////////////////////////////////////  getAsRegionName
+CREATE OR REPLACE FUNCTION getAsRegionName(arr INT[])
+    RETURNS TEXT[] AS
+$$
+DECLARE
+    total INTEGER := 0;
+    element INTEGER;
+    nameEn TEXT;
+    result TEXT[] := '{}';
+BEGIN
+    -- Massivni bosqichma-bosqich bosib o'tish
+    FOREACH element IN ARRAY arr
+        LOOP
+            select r.name_en into nameEn from region r where r.id = element;
+
+            result := array_append(result, nameEn);
+
+        END LOOP;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- /////////////////////////////////////////// Finding Path
+
+WITH RECURSIVE RoutePaths AS (
+    -- Boshlang'ich nuqtani topish
+    SELECT
+        rbr.id,
+        rbr.from_address_id,
+        rbr.to_address_id,
+        ARRAY[rbr.id] as rbr_sequence,
+        ARRAY[rbr.from_address_id, rbr.to_address_id] AS city_sequence -- Shaharning ketma-ketligi
+    FROM road_between_region rbr
+    WHERE rbr.from_address_id = 31 -- Boshlanish nuqtasi, City A (1)
+
+    UNION ALL
+
+    -- keyingi yo'llarni har qadamda qidirish
+    SELECT
+        r.id,
+        r.from_address_id,
+        r.to_address_id,
+        rp.rbr_sequence || r.id,
+        rp.city_sequence || r.to_address_id  -- Ketma-ket shaharlarni qo'shish
+    FROM road_between_region r
+             JOIN RoutePaths rp ON r.from_address_id = rp.to_address_id -- Bog'lanish
+    WHERE r.to_address_id <> ALL(rp.city_sequence)  -- Davriy zanjirdan qochish (takrorlanmasin)
+)
+
+-- Topilgan yo'nalishlarni ko'rsatish
+SELECT rbr_sequence, city_sequence, getAsRegionName(city_sequence) as city_name_sequence FROM RoutePaths
+where to_address_id = 32 ;
