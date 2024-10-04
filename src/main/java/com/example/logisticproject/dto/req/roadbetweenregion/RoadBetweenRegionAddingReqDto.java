@@ -21,6 +21,4 @@ public class RoadBetweenRegionAddingReqDto implements Serializable {
     @JsonProperty(required = true, value = "to_address_id")
     Integer toAddressId;
 
-    @NotNull
-    Boolean active;
 }

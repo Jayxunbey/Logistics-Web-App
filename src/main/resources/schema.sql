@@ -83,3 +83,43 @@ select *
 from road_transport rt
          inner join public.road_between_region rbr on rt.road_id = rbr.id
 where findTransportOptions(10, 8, false, rt, rbr) = true
+
+
+
+
+
+
+
+
+ */
+ */
+
+--  Connection larni topish
+WITH RECURSIVE RoutePaths AS (
+    -- Boshlang'ich nuqtani topish
+    SELECT
+        rbr.id,
+        rbr.from_address_id,
+        rbr.to_address_id,
+        ARRAY[rbr.id] as rbr_sequence,
+        ARRAY[rbr.from_address_id, rbr.to_address_id] AS city_sequence -- Shaharning ketma-ketligi
+    FROM road_between_region rbr
+    WHERE rbr.from_address_id = 30 or rbr.to_address_id = 30 -- Boshlanish nuqtasi, City A (1)
+
+    UNION ALL
+
+    -- keyingi yo'llarni har qadamda qidirish
+    SELECT
+        r.id,
+        r.from_address_id,
+        r.to_address_id,
+        rp.rbr_sequence || r.id,
+        rp.city_sequence || r.to_address_id  -- Ketma-ket shaharlarni qo'shish
+    FROM road_between_region r
+             JOIN RoutePaths rp ON r.from_address_id = rp.to_address_id -- Bog'lanish
+    WHERE r.to_address_id <> ALL(rp.city_sequence)  -- Davriy zanjirdan qochish (takrorlanmasin)
+)
+
+-- Topilgan yo'nalishlarni ko'rsatish
+SELECT rbr_sequence, city_sequence FROM RoutePaths
+where to_address_id = 3 or from_address_id = 3;
