@@ -80,18 +80,23 @@ public class RoadTransportService {
                 if (forUpdating.getIsBilateral()) {
                     throw new RoadTransportAlreadyExistsException();
                 } else {
+                    if (roadTransportAddingDto.getIsBilateral()) {
+                        forUpdating.setIsBilateral(true);
+                        forUpdating.setIsDirectional(true);
+                    } else {
+                        forUpdating.setIsBilateral(false);
+                        forUpdating.setIsDirectional(false);
+                    }
                     forUpdating.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
-                    forUpdating.setIsBilateral(false);
-                    forUpdating.setIsDirectional(false);
                 }
             }
 
         }
 
-        if (forSaving!=null) {
+        if (forSaving != null) {
             roadTransportRepository.save(forSaving);
         }
-        if (forUpdating!=null) {
+        if (forUpdating != null) {
             roadTransportRepository.updatePriceAndIsDirectionalAndIsBilateralById(
                     forUpdating.getPrice(),
                     forUpdating.getIsDirectional(),
