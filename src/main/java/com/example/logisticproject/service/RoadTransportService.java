@@ -30,6 +30,65 @@ public class RoadTransportService {
 
         Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
 
+        RoadTransport forSaving;
+
+        if (roadBetweenRegion.getIsDirectional()) {
+
+            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_IdAndTransport_Id(
+                    roadBetweenRegion.getId(), roadTransportAddingDto.getTransportId());
+
+            if (roadTransportOptional.isEmpty()) {
+                forSaving = new RoadTransport();
+                forSaving.setTransport(transport);
+                forSaving.setRoad(roadBetweenRegion);
+                forSaving.setIsDirectional(true);
+                forSaving.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
+                forSaving.setIsBilateral(roadTransportAddingDto.getIsBilateral());
+
+            } else {
+                throw new RoadTransportAlreadyExistsException();
+            }
+
+        } else {
+
+            RoadBetweenRegion directionallyRoad = roadBetweenRegionService.get(
+                    roadBetweenRegion.getToAddress().getId(),
+                    roadBetweenRegion.getFromAddress().getId());
+
+            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_IdAndTransport_Id(
+                    directionallyRoad.getId(),
+                    roadTransportAddingDto.getTransportId());
+
+            if (roadTransportOptional.isEmpty()) {
+
+                forSaving = new RoadTransport();
+                forSaving.setTransport(transport);
+                forSaving.setRoad(directionallyRoad);
+                forSaving.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
+                if (roadTransportAddingDto.getIsBilateral()) {
+                    forSaving.setIsBilateral(true);
+                    forSaving.setIsDirectional(true);
+                } else {
+                    forSaving.setIsBilateral(false);
+                    forSaving.setIsDirectional(false);
+                }
+
+            } else {
+                throw new RoadTransportAlreadyExistsException();
+            }
+
+        }
+
+        roadTransportRepository.save(forSaving);
+
+    }
+
+    @Transactional
+    public void updating(RoadTransportAddingDto roadTransportAddingDto) {
+        RoadBetweenRegion roadBetweenRegion = roadBetweenRegionService.get(roadTransportAddingDto.getRoadFromAddressId(), roadTransportAddingDto.getRoadToAddressId());
+
+        Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
+
         boolean isDirectional;
 
         RoadTransport forSaving = null;
@@ -133,6 +192,7 @@ public class RoadTransportService {
 //        roadTransportRepository.save(roadTransport);
 
     }
+
 
     private boolean checkIsExists(Integer roadFromAddressId, Integer roadToAddressId, Integer transportId) {
         return roadTransportRepository.existsBy3Field(roadFromAddressId, roadToAddressId, transportId);
