@@ -1,10 +1,13 @@
 package com.example.logisticproject.service;
 
 import com.example.logisticproject.dto.req.roadtransport.RoadTransportAddingDto;
+import com.example.logisticproject.dto.req.roadtransport.RoadTransportChangeActiveDto;
+import com.example.logisticproject.dto.req.roadtransport.RoadTransportUpdatingDto;
 import com.example.logisticproject.entity.RoadBetweenRegion;
 import com.example.logisticproject.entity.RoadTransport;
 import com.example.logisticproject.entity.Transport;
 import com.example.logisticproject.exceptions.classes.common.RoadTransportAlreadyExistsException;
+import com.example.logisticproject.exceptions.classes.common.RoadTransportNotFoundException;
 import com.example.logisticproject.repo.RoadTransportRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,30 +87,27 @@ public class RoadTransportService {
     }
 
     @Transactional
-    public void updating(RoadTransportAddingDto roadTransportAddingDto) {
-        RoadBetweenRegion roadBetweenRegion = roadBetweenRegionService.get(roadTransportAddingDto.getRoadFromAddressId(), roadTransportAddingDto.getRoadToAddressId());
+    public void updating(RoadTransportUpdatingDto roadTransportUpdatingDto) {
+        RoadBetweenRegion roadBetweenRegion = roadBetweenRegionService.get(roadTransportUpdatingDto.getRoadFromAddressId(), roadTransportUpdatingDto.getRoadToAddressId());
 
-        Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
-
-        boolean isDirectional;
-
-        RoadTransport forSaving = null;
-        RoadTransport forUpdating = null;
+        RoadTransport forUpdating;
 
         if (roadBetweenRegion.getIsDirectional()) {
 
-            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_IdAndTransport_Id(roadBetweenRegion.getId(), roadTransportAddingDto.getTransportId());
+            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_FromAddress_IdAndRoad_ToAddress_Id(
+                    roadTransportUpdatingDto.getRoadFromAddressId(),
+                    roadTransportUpdatingDto.getRoadToAddressId());
 
             if (roadTransportOptional.isEmpty()) {
-                RoadTransport roadTransport = new RoadTransport();
-                roadTransport.setTransport(transport);
-                roadTransport.setRoad(roadBetweenRegion);
-                roadTransport.setIsDirectional(true);
-                roadTransport.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
-                roadTransport.setIsBilateral(roadTransportAddingDto.getIsBilateral());
-                forSaving = roadTransport;
+
+                throw new RoadTransportNotFoundException();
+
             } else {
-                throw new RoadTransportAlreadyExistsException();
+                forUpdating = roadTransportOptional.get();
+
+                forUpdating.setPrice(new BigDecimal(roadTransportUpdatingDto.getPrice()));
+                forUpdating.setIsBilateral(roadTransportUpdatingDto.getIsBilateral());
+
             }
 
         } else {
@@ -116,80 +116,37 @@ public class RoadTransportService {
                     roadBetweenRegion.getToAddress().getId(),
                     roadBetweenRegion.getFromAddress().getId());
 
-            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_IdAndTransport_Id(
-                    directionallyRoad.getId(),
-                    roadTransportAddingDto.getTransportId());
+            Optional<RoadTransport> roadTransportOptional = roadTransportRepository.findByRoad_FromAddress_IdAndRoad_ToAddress_Id(
+                    directionallyRoad.getFromAddress().getId(),
+                    directionallyRoad.getToAddress().getId()
+            );
 
             if (roadTransportOptional.isEmpty()) {
-                RoadTransport roadTransport = new RoadTransport();
-                roadTransport.setTransport(transport);
-                roadTransport.setRoad(roadBetweenRegion);
-                roadTransport.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
-                if (roadTransportAddingDto.getIsBilateral()) {
-                    roadTransport.setIsBilateral(true);
-                    roadTransport.setIsDirectional(true);
-                } else {
-                    roadTransport.setIsBilateral(false);
-                    roadTransport.setIsDirectional(false);
-                }
 
-                forSaving = roadTransport;
+                throw new RoadTransportNotFoundException();
+
             } else {
                 forUpdating = roadTransportOptional.get();
-                if (forUpdating.getIsBilateral()) {
-                    throw new RoadTransportAlreadyExistsException();
+
+                if (roadTransportUpdatingDto.getIsBilateral()) {
+                    forUpdating.setIsBilateral(true);
+                    forUpdating.setIsDirectional(true);
+                    forUpdating.setPrice(new BigDecimal(roadTransportUpdatingDto.getPrice()));
                 } else {
-                    if (roadTransportAddingDto.getIsBilateral()) {
-                        forUpdating.setIsBilateral(true);
-                        forUpdating.setIsDirectional(true);
-                    } else {
-                        forUpdating.setIsBilateral(false);
-                        forUpdating.setIsDirectional(false);
-                    }
-                    forUpdating.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
+                    forUpdating.setIsBilateral(false);
+                    forUpdating.setIsDirectional(false);
+                    forUpdating.setPrice(new BigDecimal(roadTransportUpdatingDto.getPrice()));
                 }
+
             }
 
         }
 
-        if (forSaving != null) {
-            roadTransportRepository.save(forSaving);
-        }
-        if (forUpdating != null) {
-            roadTransportRepository.updatePriceAndIsDirectionalAndIsBilateralById(
-                    forUpdating.getPrice(),
-                    forUpdating.getIsDirectional(),
-                    forUpdating.getIsBilateral(),
-                    forUpdating.getId());
-        }
-
-//
-//
-//        if (checkIsExists(
-//                roadTransportAddingDto.getRoadFromAddressId(),
-//                roadTransportAddingDto.getRoadToAddressId(),
-//                roadTransportAddingDto.getTransportId()
-//        )) {
-//            throw new RoadTransportAlreadyExistsException();
-//        }
-//
-//        Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
-//
-//        if (roadBetweenRegion.getFromAddress().getId() == roadTransportAddingDto.getRoadFromAddressId()) {
-//            isDirectional = true;
-//        } else {
-//            isDirectional = false;
-//        }
-//
-//        RoadTransport roadTransport = new RoadTransport();
-//        roadTransport.setTransport(transport);
-//        roadTransport.setRoad(roadBetweenRegion);
-//        roadTransport.setPrice(new BigDecimal(roadTransportAddingDto.getPrice()));
-//        roadTransport.setActive(false);
-//        roadTransport.setIsDirectional(isDirectional);
-//        roadTransport.setIsBilateral(roadTransportAddingDto.getIsBilateral());
-//
-//        roadTransportRepository.save(roadTransport);
+        roadTransportRepository.updatePriceAndIsDirectionalAndIsBilateralById(
+                forUpdating.getPrice(),
+                forUpdating.getIsDirectional(),
+                forUpdating.getIsBilateral(),
+                forUpdating.getId());
 
     }
 
@@ -200,5 +157,16 @@ public class RoadTransportService {
 
     public void find(Integer fromId, Integer toId, boolean comeBack) {
 
+    }
+
+    public void changeActive(RoadTransportChangeActiveDto roadTransportChangeActiveDto) {
+        int i = roadTransportRepository.changeActive(
+                roadTransportChangeActiveDto.getActive(),
+                roadTransportChangeActiveDto.getRoadTransportId()
+        );
+
+        if (i < 1) {
+            throw new RoadTransportNotFoundException();
+        }
     }
 }

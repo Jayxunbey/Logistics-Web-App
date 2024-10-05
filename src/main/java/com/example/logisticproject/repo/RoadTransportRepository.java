@@ -30,4 +30,14 @@ public interface RoadTransportRepository extends JpaRepository<RoadTransport, In
     @Modifying
     @Query("update RoadTransport r set r.price = ?1, r.isDirectional = ?2, r.isBilateral = ?3 where r.id = ?4")
     int updatePriceAndIsDirectionalAndIsBilateralById(BigDecimal price, Boolean isDirectional, Boolean isBilateral, Integer id);
+
+    @Query("""
+            select r from RoadTransport r
+            where (r.road.fromAddress.id = ?1 and r.road.toAddress.id = ?2)""")
+    Optional<RoadTransport> findByRoad_FromAddress_IdAndRoad_ToAddress_Id(Integer roadFromAddressId, Integer roadToAddressId);
+
+    @Transactional
+    @Modifying
+    @Query("update RoadTransport r set r.active = ?1 where r.id = ?2")
+    int changeActive(Boolean active, Integer id);
 }
