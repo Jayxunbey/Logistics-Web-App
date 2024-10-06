@@ -178,3 +178,124 @@ WITH RECURSIVE RoutePaths AS (
 -- Topilgan yo'nalishlarni ko'rsatish
 SELECT rbr_sequence, city_sequence, getAsRegionName(city_sequence) as city_name_sequence FROM RoutePaths
 where to_address_id = 32 ;
+
+
+
+
+
+-- /////////////////////////////////////////  today 6
+WITH RECURSIVE RoutePaths AS (
+    -- Boshlang'ich nuqtani topish
+    SELECT
+        rbr.id,
+        rbr.from_address_id,
+        rbr.to_address_id,
+        ARRAY[rbr.id] as rbr_sequence,
+        ARRAY[rbr.from_address_id, rbr.to_address_id] AS city_sequence -- Shaharning ketma-ketligi
+    FROM road_between_region rbr
+    WHERE rbr.from_address_id = 31 -- Boshlanish nuqtasi, City A (1)
+
+    UNION ALL
+
+    -- keyingi yo'llarni har qadamda qidirish
+    SELECT
+        r.id,
+        r.from_address_id,
+        r.to_address_id,
+        rp.rbr_sequence || r.id,
+        rp.city_sequence || r.to_address_id  -- Ketma-ket shaharlarni qo'shish
+    FROM road_between_region r
+             JOIN RoutePaths rp ON r.from_address_id = rp.to_address_id -- Bog'lanish
+    WHERE r.to_address_id <> ALL(rp.city_sequence)  -- Davriy zanjirdan qochish (takrorlanmasin)
+)
+
+-- Topilgan yo'nalishlarni ko'rsatish
+SELECT rbr_sequence, city_sequence, getAsRegionName(city_sequence) as city_name_sequence FROM RoutePaths
+where to_address_id = 32 ;
+
+
+
+create or replace function checkRbrSequenceAndTransport(rbrSequence INT[], transportId INT)
+
+select * from;
+
+
+select *  from road_transport rt
+where rt.road_id = 20 and rt.transport_id = 3;
+
+
+-- ///////////
+insert into public.road_between_region (id, from_address_id, to_address_id, is_directional)
+values  (2, 31, 3, true),
+        (3, 3, 31, false),
+        (4, 29, 31, true),
+        (5, 31, 29, false),
+        (6, 3, 35, true),
+        (7, 35, 3, false),
+        (8, 33, 35, true),
+        (9, 35, 33, false),
+        (10, 33, 37, true),
+        (11, 37, 33, false),
+        (12, 34, 37, true),
+        (13, 37, 34, false),
+        (14, 32, 30, true),
+        (15, 30, 32, false),
+        (16, 29, 30, true),
+        (17, 30, 29, false),
+        (18, 32, 34, true),
+        (19, 34, 32, false),
+        (20, 9, 31, true),
+        (21, 31, 9, false),
+        (22, 9, 38, true),
+        (23, 38, 9, false),
+        (24, 3, 38, true),
+        (25, 38, 3, false);
+
+insert into public.road_transport (id, road_id, transport_id, active, price, is_directional, is_bilateral)
+values  (5, 20, 3, true, 27000000.00000, true, true),
+        (1, 16, 2, false, 25000000.00000, true, true);
+
+insert into public.transport (id, name, type_id, max_capasity, length, height, width, photo_attachment_id, active, can_be_fully, can_be_partially)
+values  (1, 'Jay Trucks', 1, 2500, 6, 2.5, 2, null, false, true, true),
+        (2, 'GB Trucks', 1, 5600, 8, 4.5, 3, null, false, true, false),
+        (3, 'Turkmani Airlanes', 3, 1500, 2, 2, 2, null, true, false, true);
+
+insert into public.region (id, name_en)
+values  (1, 'Yangiaryk'),
+        (2, 'Yangibozor'),
+        (3, 'Urganch'),
+        (4, 'Qarshi'),
+        (5, 'Turkman'),
+        (6, 'Moskva'),
+        (7, 'Quqan'),
+        (8, 'Istanbul'),
+        (9, 'Ashhabad'),
+        (10, 'Termiz'),
+        (11, 'Namangan'),
+        (12, 'Andijon'),
+        (13, 'Astana'),
+        (14, 'Tehron'),
+        (15, 'Bagdad'),
+        (16, 'Islamabad'),
+        (17, 'Pekin'),
+        (18, 'Ulan Batar'),
+        (19, 'Baku'),
+        (20, 'Aqtov'),
+        (21, 'Bautino'),
+        (22, 'Hazar'),
+        (23, 'Odessa'),
+        (24, 'Batumi'),
+        (25, 'Tabriz'),
+        (26, 'Isfahon'),
+        (27, 'Marv'),
+        (28, 'Tokio'),
+        (29, 'Yangiyul'),
+        (30, 'Jizzakh'),
+        (31, 'Tashkent'),
+        (32, 'Samarqand'),
+        (33, 'Turtkul'),
+        (34, 'Bukhara'),
+        (35, 'Beruniy'),
+        (36, 'Navoiy'),
+        (37, 'Gazli'),
+        (38, 'Dashoguz');
