@@ -126,3 +126,47 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
+
+-- /////////////////////////// Searching Roads connections
+
+create or replace function searchRoutes(from_id INT, to_id INT)
+    RETURNS TABLE
+            (
+                result INT[]
+            )
+AS
+$$
+
+BEGIN
+
+    return query
+        WITH RECURSIVE RoutePaths AS (
+            -- Boshlang'ich nuqtani topish
+            SELECT rbr.id,
+                   rbr.from_address_id,
+                   rbr.to_address_id,
+                   ARRAY [rbr.id]                                 as rbr_sequence,
+                   ARRAY [rbr.from_address_id, rbr.to_address_id] AS city_sequence -- Shaharning ketma-ketligi
+            FROM road_between_region rbr
+            WHERE rbr.from_address_id = from_id -- Boshlanish nuqtasi
+
+            UNION ALL
+
+            -- keyingi yo'llarni har qadamda qidirish
+            SELECT r.id,
+                   r.from_address_id,
+                   r.to_address_id,
+                   rp.rbr_sequence || r.id,
+                   rp.city_sequence || r.to_address_id -- Ketma-ket shaharlarni qo'shish
+            FROM road_between_region r
+                     JOIN RoutePaths rp ON r.from_address_id = rp.to_address_id -- Bog'lanish
+            WHERE r.to_address_id <> ALL (rp.city_sequence) -- Davriy zanjirdan qochish (takrorlanmasin)
+        )
+
+-- Topilgan yo'nalishlarni ko'rsatish
+        SELECT rbr_sequence as result
+        FROM RoutePaths
+        where to_address_id = to_id;
+
+end;
+$$ LANGUAGE plpgsql;
