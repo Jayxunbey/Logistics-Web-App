@@ -299,3 +299,112 @@ values  (1, 'Yangiaryk'),
         (36, 'Navoiy'),
         (37, 'Gazli'),
         (38, 'Dashoguz');
+
+-- /////////////////////////////////////////////////- Algorithm
+
+
+select getConnectedTransports(sr.result, true) as rows
+from searchRoutes(3, 31) sr;
+
+
+create or replace function getConnectedTransports(rowData INT[], is_come_back BOOLEAN)
+    RETURNS INT[] AS
+$$
+
+DECLARE
+    rbr_obj     road_between_region;
+    is_reversed BOOLEAN := false;
+    ret_result      INT[];
+
+BEGIN
+
+    select rbr
+    into rbr_obj
+    from road_between_region rbr
+    where rbr.id = rowData[1];
+
+    if rbr_obj.is_directional <> true then
+        is_reversed = true;
+
+        select rbr
+        into rbr_obj
+        from road_between_region rbr
+        where rbr.from_address_id = rbr_obj.to_address_id
+          and rbr.to_address_id = rbr_obj.from_address_id;
+
+    end if;
+
+    select array_agg(rt.transport_id)
+    into ret_result
+    from road_transport rt
+    where rt.road_id = rbr_obj.id
+      and checkisvalidtransportoption(rt, rt.transport_id, rbr_obj, is_reversed, rowData, is_come_back, 2);
+
+    return ret_result;
+
+end;
+$$ LANGUAGE plpgsql;
+
+
+
+-- //////////////////////// checking
+create or replace function checkisvalidtransportoption(old_rt road_transport, static_transport_id INT,
+                                                       old_is_reversed boolean,
+                                                       rowData INT[], is_come_back BOOLEAN, next_index INT)
+    RETURNS BOOLEAN AS
+$$
+
+DECLARE
+    rbr_obj     road_between_region;
+    is_reversed BOOLEAN := false;
+    rt_obj      road_transport;
+
+BEGIN
+
+
+    if old_rt.is_bilateral <> true then
+        if is_come_back or old_rt.is_directional = old_is_reversed then
+            return false;
+        end if;
+    end if;
+
+    if next_index > array_length(rowData, 1) then
+        return true;
+    end if;
+
+    select rbr
+    into rbr_obj
+    from road_between_region rbr
+    where id = rowData[next_index];
+
+    if rbr_obj.is_directional <> true then
+        is_reversed = true;
+
+        select rbr
+        into rbr_obj
+        from road_between_region rbr
+        where rbr.from_address_id = rbr_obj.to_address_id
+          and rbr.to_address_id = rbr_obj.from_address_id;
+
+    end if;
+
+    select rt
+    into rt_obj
+    from road_transport rt
+    where rt.road_id = rbr_obj.id
+      and rt.transport_id = static_transport_id;
+
+    if not FOUND then
+        return false;
+    end if;
+
+    return checkisvalidtransportoption(rt_obj,
+                                       static_transport_id,
+                                       is_reversed,
+                                       rowData,
+                                       is_come_back,
+                                       next_index + 1);
+
+end;
+$$ LANGUAGE plpgsql;
+
