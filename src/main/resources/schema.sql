@@ -302,26 +302,42 @@ values  (1, 'Yangiaryk'),
 
 -- /////////////////////////////////////////////////- Algorithm
 
+with searching as (
+    select result
+    from searchRoutes(3, 31)
+    where result is not null
+
+)
+select getConnectedTransports(rowData := result::INT[], is_come_back := true) as rowsDat
+from searching;
+
+
 
 select getConnectedTransports(sr.result, true) as rows
 from searchRoutes(3, 31) sr;
 
 
-create or replace function getConnectedTransports(rowData INT[], is_come_back BOOLEAN)
+
+
+create or replace function getConnectedTransports(rowData INT[], is_come_back boolean)
     RETURNS INT[] AS
 $$
 
 DECLARE
-    rbr_obj     road_between_region;
-    is_reversed BOOLEAN := false;
-    ret_result      INT[];
+
+    rbr_obj     public.road_between_region%ROWTYPE;
+    is_reversed boolean := false;
+    ret_result  INT[];
 
 BEGIN
 
-    select rbr
+    select *
     into rbr_obj
-    from road_between_region rbr
+    from public.road_between_region rbr
     where rbr.id = rowData[1];
+
+    is_reversed = rbr_obj.is_directional;
+
 
     if rbr_obj.is_directional <> true then
         is_reversed = true;
@@ -334,17 +350,17 @@ BEGIN
 
     end if;
 
+
     select array_agg(rt.transport_id)
     into ret_result
     from road_transport rt
     where rt.road_id = rbr_obj.id
-      and checkisvalidtransportoption(rt, rt.transport_id, rbr_obj, is_reversed, rowData, is_come_back, 2);
+      and checkisvalidtransportoption(rt, rt.transport_id, is_reversed, rowData, is_come_back, 2);
 
     return ret_result;
 
 end;
 $$ LANGUAGE plpgsql;
-
 
 
 -- //////////////////////// checking
@@ -355,12 +371,10 @@ create or replace function checkisvalidtransportoption(old_rt road_transport, st
 $$
 
 DECLARE
-    rbr_obj     road_between_region;
+    rbr_obj     public.road_between_region%ROWTYPE;
     is_reversed BOOLEAN := false;
-    rt_obj      road_transport;
-
+    rt_obj      public.road_transport%ROWTYPE;
 BEGIN
-
 
     if old_rt.is_bilateral <> true then
         if is_come_back or old_rt.is_directional = old_is_reversed then
