@@ -302,15 +302,14 @@ values  (1, 'Yangiaryk'),
 
 -- /////////////////////////////////////////////////- Algorithm
 
-with searching as (
-    select result
-    from searchRoutes(3, 31)
-    where result is not null
-
-)
-select getConnectedTransports(rowData := result::INT[], is_come_back := true) as rowsDat
-from searching;
-
+with transports as (select distinct unnest(s.rows) as transport
+                    from (select getConnectedTransports(result, true) as rows
+                          from (select result
+                                from searchRoutes(3, 31)
+                                where result is not null) as r) as s
+                    where s.rows is not null)
+select array_agg(transport)
+from transports;
 
 
 select getConnectedTransports(sr.result, true) as rows
