@@ -14,8 +14,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-
-
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleAlreadyExistsException(AlreadyExistsException e) {
         Map<String, String> map = new HashMap<>();
