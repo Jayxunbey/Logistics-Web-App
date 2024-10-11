@@ -5,6 +5,7 @@ import com.example.logisticproject.entity.WhoPay;
 import com.example.logisticproject.repo.WhoPayRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,9 @@ public class WhoPayService {
         if (byNameEn.isPresent()) {
             throw new RuntimeException("this name available");
         }
+    }
+
+    public List<WhoPay> get() {
+        return whoPayRepository.findAll();
     }
 }

@@ -1,12 +1,14 @@
 package com.example.logisticproject.service;
 
 import com.example.logisticproject.dto.req.transporttype.TransportTypeAddReqDto;
+import com.example.logisticproject.dto.resp.transporttype.TransportTypeRespDto;
 import com.example.logisticproject.entity.CargoType;
 import com.example.logisticproject.entity.TransportType;
 import com.example.logisticproject.exceptions.classes.common.TransportNotFoundException;
 import com.example.logisticproject.repo.TransportTypeRepository;
 import jakarta.validation.constraints.NotNull;
 import org.apache.coyote.BadRequestException;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,12 @@ import java.util.Optional;
 public class TransportTypeService {
 
     private final TransportTypeRepository transportTypeRepository;
+    private final ModelMapper modelMapper;
 
-    public TransportTypeService(TransportTypeRepository transportTypeRepository) {
+    public TransportTypeService(TransportTypeRepository transportTypeRepository,
+                                ModelMapper modelMapper) {
         this.transportTypeRepository = transportTypeRepository;
+        this.modelMapper = modelMapper;
     }
 
     public void add(TransportTypeAddReqDto transportTypeAddReqDto) {
@@ -53,5 +58,9 @@ public class TransportTypeService {
 
 //        throw new TransportNotFoundException();
 return null;
+    }
+
+    public TransportTypeRespDto findByIdWithForChecked(Integer typeId) {
+        return modelMapper.map(transportTypeRepository.findById(typeId).get(), TransportTypeRespDto.class);
     }
 }
