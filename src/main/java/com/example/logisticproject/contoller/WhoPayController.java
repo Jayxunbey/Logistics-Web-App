@@ -6,12 +6,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/who-pay")
@@ -42,6 +42,21 @@ public class WhoPayController {
 
         return ResponseEntity.ok().build();
 
+
+    }
+
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public ResponseEntity<Object> get( ){
+
+        return ResponseEntity.ok(whoPayService.get());
+
+    }
+
+    @GetMapping("/get-via-lang")
+    public ResponseEntity<Object> getRegions(@RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) Locale locale) {
+
+        System.out.println("locale codi = " + locale);
+        return ResponseEntity.ok().build();
 
     }
 

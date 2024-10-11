@@ -1,20 +1,23 @@
 package com.example.logisticproject.service;
 
 import com.example.logisticproject.dto.req.fortransportoption.ForTransportOptionsReqDto;
+import com.example.logisticproject.dto.resp.transport.TransportRespForTOADSDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class TransportOptionsAndOrderDetailsService {
+public class TransportOptionsService {
 
     private final RoadTransportService roadTransportService;
 
-    public TransportOptionsAndOrderDetailsService(RoadTransportService roadTransportService) {
+    public TransportOptionsService(RoadTransportService roadTransportService) {
         this.roadTransportService = roadTransportService;
     }
 
-    public void findBy(ForTransportOptionsReqDto forTransportOptionsReqDto) {
+    public List<TransportRespForTOADSDto> findBy(ForTransportOptionsReqDto forTransportOptionsReqDto) {
 
-        roadTransportService.find(
+       return roadTransportService.find(
                 forTransportOptionsReqDto.getFromId(),
                 forTransportOptionsReqDto.getToId(),
                 forTransportOptionsReqDto.isComeBack());

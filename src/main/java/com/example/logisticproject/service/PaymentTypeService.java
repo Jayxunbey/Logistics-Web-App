@@ -68,4 +68,8 @@ public class PaymentTypeService {
 
         return paymentTypeRepository.save(paymentType);
     }
+
+    public Object get() {
+        return paymentTypeRepository.findAll();
+    }
 }

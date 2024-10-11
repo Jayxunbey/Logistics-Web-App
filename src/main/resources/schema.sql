@@ -312,10 +312,30 @@ select array_agg(transport)
 from transports;
 
 
-select getConnectedTransports(sr.result, true) as rows
-from searchRoutes(3, 31) sr;
+create or replace function transports(fromId INT, toId INT, is_come_back boolean)
+    RETURNS INT[] AS
+$$
+
+DECLARE
+
+    result  INT[];
+
+BEGIN
+
+    with transports as (select distinct unnest(s.rows) as transport
+                        from (select getConnectedTransports(r.result, is_come_back) as rows
+                              from (select sr.result
+                                    from searchRoutes(fromId, toId) sr
+                                    where sr.result is not null) as r) as s
+                        where s.rows is not null)
+    select array_agg(transport) into result
+    from transports;
 
 
+    return result;
+
+end;
+$$ LANGUAGE plpgsql;
 
 
 create or replace function getConnectedTransports(rowData INT[], is_come_back boolean)

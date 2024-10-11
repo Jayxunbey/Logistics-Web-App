@@ -3,16 +3,21 @@ package com.example.logisticproject.service;
 import com.example.logisticproject.dto.req.roadtransport.RoadTransportAddingDto;
 import com.example.logisticproject.dto.req.roadtransport.RoadTransportChangeActiveDto;
 import com.example.logisticproject.dto.req.roadtransport.RoadTransportUpdatingDto;
+import com.example.logisticproject.dto.resp.transport.TransportRespForTOADSDto;
 import com.example.logisticproject.entity.RoadBetweenRegion;
 import com.example.logisticproject.entity.RoadTransport;
 import com.example.logisticproject.entity.Transport;
 import com.example.logisticproject.exceptions.classes.common.RoadTransportAlreadyExistsException;
 import com.example.logisticproject.exceptions.classes.common.RoadTransportNotFoundException;
+import com.example.logisticproject.projection.TransportProjection;
 import com.example.logisticproject.repo.RoadTransportRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,11 +25,18 @@ public class RoadTransportService {
     private final RoadTransportRepository roadTransportRepository;
     private final RoadBetweenRegionService roadBetweenRegionService;
     private final TransportService transportService;
+    private final ModelMapper modelMapper;
+    private final TransportTypeService transportTypeService;
+    private final AttachmentService attachmentService;
 
-    public RoadTransportService(RoadTransportRepository roadTransportRepository, RoadBetweenRegionService roadBetweenRegionService, TransportService transportService) {
+    public RoadTransportService(RoadTransportRepository roadTransportRepository, RoadBetweenRegionService roadBetweenRegionService, TransportService transportService,
+                                ModelMapper modelMapper, TransportTypeService transportTypeService, AttachmentService attachmentService) {
         this.roadTransportRepository = roadTransportRepository;
         this.roadBetweenRegionService = roadBetweenRegionService;
         this.transportService = transportService;
+        this.modelMapper = modelMapper;
+        this.transportTypeService = transportTypeService;
+        this.attachmentService = attachmentService;
     }
 
     @Transactional
@@ -155,7 +167,28 @@ public class RoadTransportService {
         return roadTransportRepository.existsBy3Field(roadFromAddressId, roadToAddressId, transportId);
     }
 
-    public void find(Integer fromId, Integer toId, boolean comeBack) {
+    public List<TransportRespForTOADSDto> find(Integer fromId, Integer toId, boolean comeBack) {
+        List<TransportProjection> connectedTransportsUniqueProjections = roadTransportRepository.findConnectedTransportsUnique(fromId, toId, comeBack);
+        List<TransportRespForTOADSDto> result = new ArrayList<>();
+
+        for (TransportProjection transportProjection : connectedTransportsUniqueProjections) {
+            result.add(TransportRespForTOADSDto
+                    .builder()
+                    .id(transportProjection.getId())
+                    .name(transportProjection.getName())
+                    .canBePartially(transportProjection.isCanBePartially())
+                    .canBeFully(transportProjection.isCanBeFully())
+                    .width(transportProjection.getWidth())
+                    .height(transportProjection.getHeight())
+                    .length(transportProjection.getLength())
+                    .maxCapacity(transportProjection.getMaxCapacity())
+                    .type(transportTypeService.findByIdWithForChecked(transportProjection.getTypeId()))
+                    .photoAttachmentId(transportProjection.getPhotoAttachmentId())
+                    .build());
+        }
+
+
+        return result;
 
     }
 
