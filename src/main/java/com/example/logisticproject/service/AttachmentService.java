@@ -212,12 +212,14 @@ public class AttachmentService {
             return oneByIdWhichActiveFalse.get();
         }
 
-        throw new AttachmentNotFoundException();
+//        throw new AttachmentNotFoundException();
+    return null;
     }
 
     public void activationFile(String id) {
         if (attachmentRepository.updateActiveByIdAndActiveFalse(id,true)<1) {
-            throw new AttachmentNotFoundException();
+//            throw new AttachmentNotFoundException();
+            return;
         }
     }
 }

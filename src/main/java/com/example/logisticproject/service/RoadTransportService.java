@@ -33,7 +33,7 @@ public class RoadTransportService {
                 roadTransportAddingDto.getRoadToAddressId(),
                 roadTransportAddingDto.getTransportId()
         )) {
-            throw new RoadTransportAlreadyExistsException();
+//            throw new RoadTransportAlreadyExistsException();
         }
 
         Transport transport = transportService.get(roadTransportAddingDto.getTransportId());

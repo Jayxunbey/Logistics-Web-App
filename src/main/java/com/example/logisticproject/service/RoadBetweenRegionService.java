@@ -122,7 +122,8 @@ public class RoadBetweenRegionService {
     public RoadBetweenRegion get(Integer roadFromAddressId, Integer roadToAddressId) {
         Optional<RoadBetweenRegion> allOptions = roadBetweenRegionRepository.findAllOptions(roadFromAddressId, roadToAddressId);
         if (allOptions.isEmpty()) {
-            throw new RoadBetweenRegionNotFoundException();
+//            throw new RoadBetweenRegionNotFoundException();
+            return null;
         }
         return allOptions.get();
     }

@@ -11,7 +11,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 @Table(name = "setting_languages")
 public class Language extends Auditable {
 

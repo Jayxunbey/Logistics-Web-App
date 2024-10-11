@@ -71,7 +71,7 @@ public class TransportService {
     public Transport get(Integer transportId) {
         Optional<Transport> byId = transportRepository.findById(transportId);
         if (byId.isEmpty()){
-            throw new TransportNotFoundException();
+//            throw new TransportNotFoundException();
         }
 
         return byId.get();

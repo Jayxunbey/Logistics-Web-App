@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1000015-1" author="jayxunbey">
+
+        <sql>
+
+            CREATE TABLE permissions
+            (
+                id         UUID NOT NULL,
+                created_by UUID,
+                updated_by UUID,
+                created_at TIMESTAMP WITHOUT TIME ZONE,
+                updated_at TIMESTAMP WITHOUT TIME ZONE,
+                is_deleted BOOLEAN DEFAULT FALSE,
+                deleted_at TIMESTAMP WITHOUT TIME ZONE,
+                code       VARCHAR(255),
+                name       VARCHAR(255),
+                CONSTRAINT pk_permissions PRIMARY KEY (id)
+            );
+
+            CREATE TABLE role_permissions
+            (
+                id            UUID NOT NULL,
+                created_by    UUID,
+                updated_by    UUID,
+                created_at    TIMESTAMP WITHOUT TIME ZONE,
+                updated_at    TIMESTAMP WITHOUT TIME ZONE,
+                is_deleted    BOOLEAN DEFAULT FALSE,
+                deleted_at    TIMESTAMP WITHOUT TIME ZONE,
+                role_id       UUID NOT NULL,
+                permission_id UUID NOT NULL,
+                CONSTRAINT pk_role_permissions PRIMARY KEY (id)
+            );
+
+            CREATE TABLE roles
+            (
+                id          UUID         NOT NULL,
+                created_by  UUID,
+                updated_by  UUID,
+                created_at  TIMESTAMP WITHOUT TIME ZONE,
+                updated_at  TIMESTAMP WITHOUT TIME ZONE,
+                is_deleted  BOOLEAN DEFAULT FALSE,
+                deleted_at  TIMESTAMP WITHOUT TIME ZONE,
+                name        VARCHAR(255) NOT NULL,
+                description VARCHAR(255),
+                code        VARCHAR(255),
+                CONSTRAINT pk_roles PRIMARY KEY (id)
+            );
+
+            CREATE TABLE setting_languages
+            (
+                id         UUID NOT NULL,
+                created_by UUID,
+                updated_by UUID,
+                created_at TIMESTAMP WITHOUT TIME ZONE,
+                updated_at TIMESTAMP WITHOUT TIME ZONE,
+                is_deleted BOOLEAN DEFAULT FALSE,
+                deleted_at TIMESTAMP WITHOUT TIME ZONE,
+                name       VARCHAR(255),
+                code       VARCHAR(255),
+                CONSTRAINT pk_setting_languages PRIMARY KEY (id)
+            );
+
+            CREATE TABLE user_roles
+            (
+                id         UUID NOT NULL,
+                created_by UUID,
+                updated_by UUID,
+                created_at TIMESTAMP WITHOUT TIME ZONE,
+                updated_at TIMESTAMP WITHOUT TIME ZONE,
+                is_deleted BOOLEAN DEFAULT FALSE,
+                deleted_at TIMESTAMP WITHOUT TIME ZONE,
+                user_id    UUID NOT NULL,
+                role_id    UUID NOT NULL,
+                CONSTRAINT pk_user_roles PRIMARY KEY (id)
+            );
+
+            ALTER TABLE users
+                ADD created_at TIMESTAMP WITHOUT TIME ZONE;
+
+            ALTER TABLE users
+                ADD created_by UUID;
+
+            ALTER TABLE users
+                ADD deleted_at TIMESTAMP WITHOUT TIME ZONE;
+
+            ALTER TABLE users
+                ADD district_id UUID;
+
+            ALTER TABLE users
+                ADD first_name VARCHAR(255);
+
+            ALTER TABLE users
+                ADD is_deleted BOOLEAN DEFAULT FALSE;
+
+            ALTER TABLE users
+                ADD lang_id UUID;
+
+            ALTER TABLE users
+                ADD last_name VARCHAR(255);
+
+            ALTER TABLE users
+                ADD latitude DOUBLE PRECISION;
+
+            ALTER TABLE users
+                ADD logo_url VARCHAR(255);
+
+            ALTER TABLE users
+                ADD longitude DOUBLE PRECISION;
+
+            ALTER TABLE users
+                ADD middle_name VARCHAR(255);
+
+            ALTER TABLE users
+                ADD phone_number VARCHAR(255);
+
+            ALTER TABLE users
+                ADD region_id UUID;
+
+            ALTER TABLE users
+                ADD updated_at TIMESTAMP WITHOUT TIME ZONE;
+
+            ALTER TABLE users
+                ADD updated_by UUID;
+
+            ALTER TABLE users
+                ADD username VARCHAR(255);
+
+            ALTER TABLE users
+                ADD verification_code VARCHAR(255);
+
+            ALTER TABLE users
+                ALTER COLUMN username SET NOT NULL;
+
+            ALTER TABLE users
+                ADD CONSTRAINT uc_users_lang UNIQUE (lang_id);
+
+            ALTER TABLE users
+                ADD CONSTRAINT FK_USERS_ON_LANG FOREIGN KEY (lang_id) REFERENCES setting_languages (id);
+
+            ALTER TABLE users
+            DROP COLUMN active;
+
+            ALTER TABLE users
+            DROP COLUMN phone;
+
+            ALTER TABLE users
+            DROP COLUMN registrated_time;
+
+            ALTER TABLE users
+            DROP COLUMN role;
+
+            ALTER TABLE users
+            DROP COLUMN id;
+
+            ALTER TABLE users
+                ALTER COLUMN email DROP NOT NULL;
+
+            ALTER TABLE users
+                ADD id UUID NOT NULL PRIMARY KEY;
+
+            ALTER TABLE users
+                ADD CONSTRAINT uc_users_lang UNIQUE (id);
+
+        </sql>
+
+
+    </changeSet>
+</databaseChangeLog>
