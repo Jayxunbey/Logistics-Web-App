@@ -176,7 +176,6 @@
             ALTER TABLE users
                 ADD id UUID NOT NULL PRIMARY KEY unique;
 
-
             alter table "order"
                 add column "user_id" UUID unique not null;
 
