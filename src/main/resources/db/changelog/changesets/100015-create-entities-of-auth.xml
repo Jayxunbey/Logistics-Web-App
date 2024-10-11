@@ -143,28 +143,54 @@
                 ADD CONSTRAINT FK_USERS_ON_LANG FOREIGN KEY (lang_id) REFERENCES setting_languages (id);
 
             ALTER TABLE users
-            DROP COLUMN active;
+            DROP
+            COLUMN active;
 
             ALTER TABLE users
-            DROP COLUMN phone;
+            DROP
+            COLUMN phone;
 
             ALTER TABLE users
-            DROP COLUMN registrated_time;
+            DROP
+            COLUMN registrated_time;
 
             ALTER TABLE users
-            DROP COLUMN role;
+            DROP
+            COLUMN role;
+
+            alter table "order"
+            drop
+            column user_id;
+
+            alter table order_history
+            drop
+            column user_id;
 
             ALTER TABLE users
-            DROP COLUMN id;
+            DROP
+            COLUMN id;
 
             ALTER TABLE users
                 ALTER COLUMN email DROP NOT NULL;
 
             ALTER TABLE users
-                ADD id UUID NOT NULL PRIMARY KEY;
+                ADD id UUID NOT NULL PRIMARY KEY unique;
 
-            ALTER TABLE users
-                ADD CONSTRAINT uc_users_lang UNIQUE (id);
+
+            alter table "order"
+                add column "user_id" UUID unique not null;
+
+            alter table "order_history"
+                add column "user_id" UUID unique not null;
+
+            ALTER TABLE
+                "order"
+                ADD CONSTRAINT "order_user_id_foreign" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+            ALTER TABLE
+                "order_history"
+                ADD CONSTRAINT "order_history_id_foreign" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
 
         </sql>
 
