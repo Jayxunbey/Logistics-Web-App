@@ -1,9 +1,6 @@
 package com.example.logisticproject.dto.resp;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -12,6 +9,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class RoleShortDto implements Serializable {
     private UUID id;
     private String name;

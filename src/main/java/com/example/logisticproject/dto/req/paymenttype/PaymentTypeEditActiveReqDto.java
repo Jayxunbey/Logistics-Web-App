@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class PaymentTypeEditActiveReqDto {
     @NotNull
-    private Integer id;
+    private UUID id;
 
     @NotNull
     private Boolean active;

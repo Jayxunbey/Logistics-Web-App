@@ -8,8 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface AttachmentRepository extends JpaRepository<Attachment, String> {
+public interface AttachmentRepository extends JpaRepository<Attachment, UUID> {
     @Query("select a from Attachment a where a.active = false")
     List<Attachment> findAllActiveFalse();
 
@@ -20,5 +21,5 @@ public interface AttachmentRepository extends JpaRepository<Attachment, String> 
     @Transactional
     @Modifying
     @Query("update Attachment a set a.active = ?2 where a.id = ?1 and a.active = false")
-    int updateActiveByIdAndActiveFalse( String id, boolean active);
+    int updateActiveByIdAndActiveFalse( UUID id, boolean active);
 }

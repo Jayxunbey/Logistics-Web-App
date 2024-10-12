@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransportTypeService {
@@ -45,13 +46,13 @@ public class TransportTypeService {
         return transportTypeRepository.findAll();
     }
 
-    public TransportType checkIsExists(@NotNull Integer transportTypeId) {
+    public TransportType checkIsExists(@NotNull UUID transportTypeId) {
         Optional<TransportType> byId = transportTypeRepository.findById(transportTypeId);
         if (byId.isPresent()) {
             return byId.get();
         }
 
-        throw new TransportNotFoundException();
+        throw new TransportNotFoundException("transport.not.found");
 
     }
 }

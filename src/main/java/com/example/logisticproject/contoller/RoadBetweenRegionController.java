@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/road-between-region")
@@ -70,7 +71,7 @@ public class RoadBetweenRegionController {
     }
 
     @RequestMapping(value = "/find-connected-regions", method = RequestMethod.GET)
-    public ResponseEntity<List<RegionResponse>> findConnectedRegion(@RequestParam(defaultValue = "") String name, @RequestParam(name = "region_id") Integer regionId ){
+    public ResponseEntity<List<RegionResponse>> findConnectedRegion(@RequestParam(defaultValue = "") String name, @RequestParam(name = "region_id") UUID regionId ){
 
         List<RegionResponse> regionResponses = roadBetweenRegionService.searchConnectedRegions(name, regionId);
 

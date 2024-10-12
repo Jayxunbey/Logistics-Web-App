@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/region")
@@ -65,7 +66,7 @@ public class RegionController {
             )
     })
     @RequestMapping(value = "/search-without-region", method = RequestMethod.GET)
-    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String name, @RequestParam("except-region-id") Integer exceptedRegionId) {
+    public ResponseEntity<List<Region>> searchRegion(@RequestParam(value = "region") String name, @RequestParam("except-region-id") UUID exceptedRegionId) {
 
         List<Region> searched = regionService.searchWithoutId(name,exceptedRegionId);
 
@@ -95,7 +96,7 @@ public class RegionController {
             )
     })
     @PutMapping("/{regionId}")
-    public RegionResponse update(@PathVariable(name = "regionId") int id, @RequestBody @Validated RegionAddReqDto update) {
+    public RegionResponse update(@PathVariable(name = "regionId") UUID id, @RequestBody @Validated RegionAddReqDto update) {
         return regionService.update(id, update);
     }
 

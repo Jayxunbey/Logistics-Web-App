@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +49,7 @@ public class RegionService {
         return regionRepository.searchBy(text);
     }
 
-    public List<Region> searchWithoutId(String text, Integer exceptedRegionId) {
+    public List<Region> searchWithoutId(String text, UUID exceptedRegionId) {
 
         if (text == null || text.isEmpty()) {
             return List.of();
@@ -67,7 +68,7 @@ public class RegionService {
         return result;
     }
 
-    public Region checkRegion(@NotNull Integer fromAddressId) {
+    public Region checkRegion(@NotNull UUID fromAddressId) {
         Optional<Region> byId = regionRepository.findById(fromAddressId);
         if (byId.isEmpty()){
             throw new RuntimeException("Region not found");
@@ -86,11 +87,11 @@ public class RegionService {
         return regionRepository.findAll(pageable).map(e -> modelMapper.map(e, RegionResponse.class));
     }
 
-    public Region findById(Integer id) {
+    public Region findById(UUID id) {
         return regionRepository.findById(id).orElseThrow(() -> new RuntimeException(String.format("Region with id %s not found", id)));
     }
 
-    public RegionResponse update(int id, RegionAddReqDto update) {
+    public RegionResponse update(UUID id, RegionAddReqDto update) {
         Region region = findById(id);
         region.setNameEn(update.getNameEn());
         return modelMapper.map(regionRepository.save(region), RegionResponse.class);

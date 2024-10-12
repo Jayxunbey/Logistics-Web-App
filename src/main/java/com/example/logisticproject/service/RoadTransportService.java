@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Service
 public class RoadTransportService {
@@ -33,7 +34,7 @@ public class RoadTransportService {
                 roadTransportAddingDto.getRoadToAddressId(),
                 roadTransportAddingDto.getTransportId()
         )) {
-            throw new RoadTransportAlreadyExistsException();
+            throw new RoadTransportAlreadyExistsException("road.transport.already.exist");
         }
 
         Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
@@ -56,7 +57,7 @@ public class RoadTransportService {
 
     }
 
-    private boolean checkIsExists(Integer roadFromAddressId, Integer roadToAddressId, Integer transportId) {
+    private boolean checkIsExists(UUID roadFromAddressId, UUID roadToAddressId, UUID transportId) {
         return roadTransportRepository.existsBy3Field(roadFromAddressId, roadToAddressId, transportId);
     }
 }

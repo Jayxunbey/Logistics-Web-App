@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * DTO for {@link com.example.logisticproject.entity.Transport}
  */
@@ -15,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 
 public class TransportResponse {
-    Integer id;
+    UUID id;
     @NotNull
     @Size(max = 255)
     String name;

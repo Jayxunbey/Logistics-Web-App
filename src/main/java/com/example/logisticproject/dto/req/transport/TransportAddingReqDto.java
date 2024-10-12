@@ -13,6 +13,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * DTO for {@link com.example.logisticproject.entity.Transport}
@@ -27,7 +28,7 @@ public class TransportAddingReqDto implements Serializable {
 
     @NotNull
     @JsonProperty("transport_type_id")
-    Integer transportTypeId;
+    UUID transportTypeId;
 
     @NotNull
     @JsonProperty("max_capacity")

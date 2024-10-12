@@ -27,12 +27,12 @@ public class SchedulingTasks {
 
         List<Attachment> allWhichActiveFalse = attachmentService.getAllWhichActiveFalse();
 
-        for (Attachment attachment : allWhichActiveFalse) {
-            if (!reactiveRedisService.getPhotoData(attachment.getId())) {
-                attachmentService.deleteFileByFullPath(attachment.getPath());
-                attachmentService.deleteById(attachment.getId());
-            }
-        }
+//        for (Attachment attachment : allWhichActiveFalse) {
+//            if (!reactiveRedisService.getPhotoData(attachment.getId())) {
+//                attachmentService.deleteFileByFullPath(attachment.getPath());
+//                attachmentService.deleteById(attachment.getId());
+//            }
+//        }
 
 
     }

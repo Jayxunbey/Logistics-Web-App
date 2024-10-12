@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransportService {
@@ -68,10 +69,10 @@ public class TransportService {
         return map;
     }
 
-    public Transport get(Integer transportId) {
+    public Transport get(UUID transportId) {
         Optional<Transport> byId = transportRepository.findById(transportId);
         if (byId.isEmpty()){
-            throw new TransportNotFoundException();
+            throw new TransportNotFoundException("transport.not.found");
         }
 
         return byId.get();

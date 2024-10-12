@@ -27,13 +27,6 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
     private final Translator translator;
 
-    @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleAlreadyExistsException(AlreadyExistsException e) {
-        Map<String, String> map = new HashMap<>();
-        map.put("error", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(map);
-    }
-
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFoundException(NotFoundException e) {
         Map<String, String> map = new HashMap<>();
@@ -107,7 +100,7 @@ public class GlobalExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(GenericRuntimeException.class)
     public final ResponseEntity<?> handleGenericRuntimeException(final GenericRuntimeException e) {
-        log.error("AlreadyExistsException on: {}", ErrorUtil.getStacktrace(e));
+        log.error("GenericRuntimeException on: {}", ErrorUtil.getStacktrace(e));
         return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(e.getMessage()))), new HttpHeaders(),
                 HttpStatus.BAD_REQUEST);
     }

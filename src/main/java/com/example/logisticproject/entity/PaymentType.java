@@ -14,7 +14,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "payment_type")
 public class PaymentType extends Auditable {
 
-
     @Size(max = 255)
     @NotNull
     @Column(name = "name_en", nullable = false)

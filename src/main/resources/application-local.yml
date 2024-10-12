@@ -12,17 +12,41 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
+    hikari:
+      idle-timeout: '30000'
+      maximum-pool-size: '10'
+      connection-timeout: '20000'
+      pool-name: HikariCP
+      max-lifetime: '1800000'
+      minimum-idle: '5'
     username: postgres
     password: 2365
     url: jdbc:postgresql://localhost:5432/logistic
 
   liquibase:
-    change-log: db/changelog/changelogMaster.xml
+    enabled: false
+    default-schema: public
+    change-log: classpath:/db/changelog-master.xml
+
+  sql:
+    init:
+      platform: postgres
 
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: true
+      ddl-auto: create
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    open-in-view: 'false'
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        enable_lazy_load_no_trans: true
 
   data:
     redis:
@@ -49,7 +73,7 @@ server:
 file:
   saving:
     default-directory:
-#              is-enabled: true
+    #              is-enabled: true
 
     base-directory:
       path: D:\Projects\resource\logistic\photos

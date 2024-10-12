@@ -12,10 +12,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "attachment")
+@Table(name = "attachments")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Attachment extends Auditable {
+
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
 
     @Size(max = 255)
     @NotNull

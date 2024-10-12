@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,7 +56,7 @@ public class RoadBetweenRegionService {
 
     }
 
-    private void checkIsExistRoadBetweenRegion(@NotNull Integer fromAddressId, @NotNull Integer toAddressId) {
+    private void checkIsExistRoadBetweenRegion(@NotNull UUID fromAddressId, @NotNull UUID toAddressId) {
         if (roadBetweenRegionRepository.checkIsRoadExists(fromAddressId, toAddressId)) {
             throw new RuntimeException("Road between regions already exists");
         }
@@ -111,7 +112,7 @@ public class RoadBetweenRegionService {
 
     }
 
-    public List<RegionResponse> searchConnectedRegions(String name, Integer regionId) {
+    public List<RegionResponse> searchConnectedRegions(String name, UUID regionId) {
 
         List<RegionProjection> regionProjections = roadBetweenRegionRepository.findConnectedRegionBy(name, regionId);
 
@@ -119,10 +120,10 @@ public class RoadBetweenRegionService {
 
     }
 
-    public RoadBetweenRegion get(Integer roadFromAddressId, Integer roadToAddressId) {
+    public RoadBetweenRegion get(UUID roadFromAddressId, UUID roadToAddressId) {
         Optional<RoadBetweenRegion> allOptions = roadBetweenRegionRepository.findAllOptions(roadFromAddressId, roadToAddressId);
         if (allOptions.isEmpty()) {
-            throw new RoadBetweenRegionNotFoundException();
+            throw new RoadBetweenRegionNotFoundException("road.between.region.not.found");
         }
         return allOptions.get();
     }

@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CargoTypeRepository extends JpaRepository<CargoType, Integer> {
+public interface CargoTypeRepository extends JpaRepository<CargoType, UUID> {
   @Query("select c from CargoType c where upper(c.nameEn) = upper(?1)")
   Optional<CargoType> findByNameEn(String nameEn);
 }

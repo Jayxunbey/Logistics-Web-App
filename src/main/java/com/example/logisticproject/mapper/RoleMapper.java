@@ -5,9 +5,12 @@ import com.example.logisticproject.entity.auth.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.stereotype.Component;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
-public interface RoleMapper {
+@Component
+public class RoleMapper {
 
-    RoleShortDto toRoleDto(Role role);
+    public RoleShortDto toRoleDto(Role role) {
+        return RoleShortDto.builder().build();
+    }
 }

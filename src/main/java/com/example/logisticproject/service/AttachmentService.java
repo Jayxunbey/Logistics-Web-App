@@ -174,7 +174,7 @@ public class AttachmentService {
         return attachmentRepository.findAllActiveFalse();
     }
 
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
         attachmentRepository.deleteById(id);
     }
 
@@ -212,12 +212,12 @@ public class AttachmentService {
             return oneByIdWhichActiveFalse.get();
         }
 
-        throw new AttachmentNotFoundException();
+        throw new AttachmentNotFoundException("attachment.not.found");
     }
 
-    public void activationFile(String id) {
+    public void activationFile(UUID id) {
         if (attachmentRepository.updateActiveByIdAndActiveFalse(id,true)<1) {
-            throw new AttachmentNotFoundException();
+            throw new AttachmentNotFoundException("attachment.not.found");
         }
     }
 }

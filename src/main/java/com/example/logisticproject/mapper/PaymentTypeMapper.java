@@ -6,10 +6,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface PaymentTypeMapper {
+@Component
+public class PaymentTypeMapper {
 
-    @Mappings({@Mapping(target = "id", source = "id"), @Mapping(target = "nameEn", source = "nameEn")})
-    PaymentTypeRespDto toRespDto(PaymentType paymentType);
+    public PaymentTypeRespDto toRespDto(PaymentType paymentType) {
+        return PaymentTypeRespDto.builder().build();
+    }
 }

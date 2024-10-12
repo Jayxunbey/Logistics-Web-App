@@ -9,6 +9,7 @@ import lombok.Value;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * DTO for {@link com.example.logisticproject.entity.RoadTransport}
@@ -18,15 +19,15 @@ import java.math.BigDecimal;
 public class RoadTransportAddingDto {
     @NotNull
     @JsonProperty(value = "road_from_address_id")
-    Integer roadFromAddressId;
+    UUID roadFromAddressId;
 
     @NotNull
     @JsonProperty(value = "road_to_address_id")
-    Integer roadToAddressId;
+    UUID roadToAddressId;
 
     @NotNull
     @JsonProperty(value = "transport_id")
-    Integer transportId;
+    UUID transportId;
 
     @NotNull
     String price;

@@ -10,16 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRegion, Integer> {
+public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRegion, UUID> {
 
     @Query("select (count(r) > 0) from RoadBetweenRegion r where r.fromAddress.id = ?1 and r.toAddress.id = ?2")
-    boolean checkIsRoadExists(Integer fromId, Integer toId);
+    boolean checkIsRoadExists(UUID fromId, UUID toId);
 
     @Transactional
     @Modifying
     @Query("update RoadBetweenRegion r set r.active = ?1 where r.id = ?2")
-    int changeActive(Boolean active, Integer id);
+    int changeActive(Boolean active, UUID id);
 
     @Query(nativeQuery = true,
             value = """
@@ -55,11 +56,11 @@ public interface RoadBetweenRegionRepository extends JpaRepository<RoadBetweenRe
                     order by position(lower(:text) in lower(searched.name_en));
 
                     """)
-    List<RegionProjection> findConnectedRegionBy(@Param("text") String text, @Param("id") Integer regionId);
+    List<RegionProjection> findConnectedRegionBy(@Param("text") String text, @Param("id") UUID regionId);
 
     @Query(value = "select * from road_between_region order by from_address_id limit :size offset (:page-1)*:size",nativeQuery = true )
     List<RoadBetweenRegion> findAsPagination(Integer page, Integer size);
 
     @Query("select r from RoadBetweenRegion r where (r.fromAddress.id = ?1 and r.toAddress.id = ?2) or (r.fromAddress.id = ?2 and r.toAddress.id = ?1)")
-    Optional<RoadBetweenRegion>  findAllOptions(Integer fromId, Integer toId);
+    Optional<RoadBetweenRegion>  findAllOptions(UUID fromId, UUID toId);
 }

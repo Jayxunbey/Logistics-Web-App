@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 /**
  * DTO for {@link RoadBetweenRegion}
  */
@@ -12,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class RoadBetweenRegionChangeActiveReqDto {
     @NotNull
-    Integer id;
+    UUID id;
     @NotNull
     Boolean active;
 

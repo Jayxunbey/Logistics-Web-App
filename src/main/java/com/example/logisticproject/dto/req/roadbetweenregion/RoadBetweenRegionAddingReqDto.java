@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * DTO for {@link RoadBetweenRegion}
@@ -16,10 +17,10 @@ import java.io.Serializable;
 public class RoadBetweenRegionAddingReqDto implements Serializable {
     @NotNull
     @JsonProperty(required = true, value = "from_address_id")
-    Integer fromAddressId;
+    UUID fromAddressId;
     @NotNull
     @JsonProperty(required = true, value = "to_address_id")
-    Integer toAddressId;
+    UUID toAddressId;
 
     @NotNull
     Boolean active;
