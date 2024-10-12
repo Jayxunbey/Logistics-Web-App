@@ -1,5 +1,6 @@
 package com.example.logisticproject.entity;
 
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,13 +12,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Setter
 @Entity
 @Table(name = "payment_type")
-public class PaymentType {
+public class PaymentType extends Auditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('payment_type_id_seq')")
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
     @Size(max = 255)
     @NotNull

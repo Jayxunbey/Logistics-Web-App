@@ -1,11 +1,10 @@
 package com.example.logisticproject.entity;
 
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -13,12 +12,8 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "road_transport")
-public class RoadTransport {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('road_transport_id_seq')")
-    @Column(name = "id", nullable = false)
-    private Integer id;
+public class RoadTransport extends Auditable {
+
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

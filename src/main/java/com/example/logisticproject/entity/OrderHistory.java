@@ -1,6 +1,7 @@
 package com.example.logisticproject.entity;
 
 import com.example.logisticproject.entity.auth.User;
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,12 +15,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "order_history")
-public class OrderHistory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('order_history_id_seq')")
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class OrderHistory extends Auditable {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

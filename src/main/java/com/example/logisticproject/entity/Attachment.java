@@ -1,5 +1,6 @@
 package com.example.logisticproject.entity;
 
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,11 +15,7 @@ import lombok.Setter;
 @Table(name = "attachment")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attachment {
-    @Id
-    @Size(max = 255)
-    @Column(name = "id", nullable = false)
-    private String id;
+public class Attachment extends Auditable {
 
     @Size(max = 255)
     @NotNull

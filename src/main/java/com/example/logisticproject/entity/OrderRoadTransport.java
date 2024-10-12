@@ -1,5 +1,6 @@
 package com.example.logisticproject.entity;
 
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,11 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "order_road_transport")
-public class OrderRoadTransport {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class OrderRoadTransport extends Auditable {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

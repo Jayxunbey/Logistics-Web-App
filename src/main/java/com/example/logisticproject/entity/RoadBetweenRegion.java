@@ -1,12 +1,12 @@
 package com.example.logisticproject.entity;
 
+import com.example.logisticproject.entity.base.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -14,12 +14,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "road_between_region")
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoadBetweenRegion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('road_beetwen_region_id_seq')")
-    @Column(name = "id", nullable = false)
-    private Integer id;
+public class RoadBetweenRegion extends Auditable {
+
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)

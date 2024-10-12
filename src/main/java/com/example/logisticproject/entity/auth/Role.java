@@ -29,6 +29,6 @@ public class Role extends Auditable {
     private String code;
 
     public String getAuthority() {
-        return this.code;
+        return "ROLE_" + this.name.toUpperCase();
     }
 }

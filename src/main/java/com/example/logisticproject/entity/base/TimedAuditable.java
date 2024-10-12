@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class TimedAuditable {
+
     @JsonIgnore
     @Column(name = "created_at")
     private LocalDateTime createdAt;
