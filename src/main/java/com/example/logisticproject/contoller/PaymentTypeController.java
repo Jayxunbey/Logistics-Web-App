@@ -98,5 +98,12 @@ public class PaymentTypeController {
         return ResponseEntity.ok(paymentTypeService.editActive(paymentTypeEditActiveReqDto));
     }
 
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public ResponseEntity<Object> get( ){
+
+        return ResponseEntity.ok(paymentTypeService.get());
+
+    }
+
 
 }

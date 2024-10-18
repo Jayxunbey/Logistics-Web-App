@@ -16,10 +16,10 @@ public interface RegionRepository extends JpaRepository<Region, Integer> {
     Optional<Region> findByNameEnIgnoreCase(String nameEn);
 
     @Query(nativeQuery = true,
-            value = "select * from public.region where name_en ilike concat('%',:text,'%')")
+            value = "select * from public.region where name_en ilike concat('%',:text,'%') order by position(lower(:text) in lower(name_en))")
     List<Region> searchBy(@Param("text") String text);
 
-    @Query(nativeQuery = true, value = "select * from public.region r where r.name_en ilike concat('%',?,'%') and r.id <> ?")
+    @Query(nativeQuery = true, value = "select * from public.region r where r.name_en ilike concat('%',?1,'%') and r.id <> ?2 order by position(lower(?1) in lower(name_en))")
     List<Region> searchWithoutId(String nameEn, Integer id);
 
 }

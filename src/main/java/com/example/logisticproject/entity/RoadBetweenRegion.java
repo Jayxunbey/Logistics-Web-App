@@ -31,8 +31,8 @@ public class RoadBetweenRegion {
     @JoinColumn(name = "to_address_id", nullable = false)
     private Region toAddress;
 
-    @NotNull
-    @Column(name = "active", nullable = false)
-    private Boolean active = false;
 
+    @NotNull
+    @Column(name = "is_directional", nullable = false)
+    private Boolean isDirectional = true;
 }

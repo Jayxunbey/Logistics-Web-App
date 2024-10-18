@@ -36,13 +36,13 @@ public class RoadBetweenRegionController {
 
     }
 
-    @Operation(summary = "Change isActive status of the RoadBetweenRegion")
-    @RequestMapping(value = "/change-active", method = RequestMethod.POST)
-    public void changeActive(@RequestBody @Validated RoadBetweenRegionChangeActiveReqDto roadBetweenRegionChangeActiveReqDto){
-
-        roadBetweenRegionService.changeActive(roadBetweenRegionChangeActiveReqDto);
-
-    }
+//    @Operation(summary = "Change isActive status of the RoadBetweenRegion")
+//    @RequestMapping(value = "/change-active", method = RequestMethod.POST)
+//    public void changeActive(@RequestBody @Validated RoadBetweenRegionChangeActiveReqDto roadBetweenRegionChangeActiveReqDto){
+//
+//        roadBetweenRegionService.changeActive(roadBetweenRegionChangeActiveReqDto);
+//
+//    }
 
 
     @Operation(summary = "Get RoadBetweenRegion as a page", description = "Allows the user to get RoadBetweenRegion as a page")

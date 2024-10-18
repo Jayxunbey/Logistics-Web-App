@@ -1,11 +1,11 @@
 package com.example.logisticproject.service;
 
 import com.example.logisticproject.dto.req.roadbetweenregion.RoadBetweenRegionAddingReqDto;
-import com.example.logisticproject.dto.req.roadbetweenregion.RoadBetweenRegionChangeActiveReqDto;
 import com.example.logisticproject.dto.resp.region.RegionResponse;
 import com.example.logisticproject.dto.resp.roadbetweenregion.RoadBetweenRegionPaginationRespDto;
 import com.example.logisticproject.entity.Region;
 import com.example.logisticproject.entity.RoadBetweenRegion;
+import com.example.logisticproject.exceptions.classes.common.RoadBetweenRegionAlreadyExistException;
 import com.example.logisticproject.exceptions.classes.common.RoadBetweenRegionNotFoundException;
 import com.example.logisticproject.projection.RegionProjection;
 import com.example.logisticproject.repo.RoadBetweenRegionRepository;
@@ -37,6 +37,7 @@ public class RoadBetweenRegionService {
     }
 
     public void add(RoadBetweenRegionAddingReqDto roadBetweenRegionAddingReqDto) {
+
         checkIsExistRoadBetweenRegion(
                 roadBetweenRegionAddingReqDto.getFromAddressId(),
                 roadBetweenRegionAddingReqDto.getToAddressId());
@@ -45,42 +46,48 @@ public class RoadBetweenRegionService {
         Region toRegion = regionService.checkRegion(roadBetweenRegionAddingReqDto.getToAddressId());
 
 
-        RoadBetweenRegion roadBetweenRegion = new RoadBetweenRegion();
+        RoadBetweenRegion roadBetweenRegionDirectional = new RoadBetweenRegion();
+        RoadBetweenRegion roadBetweenRegionNotDirectional = new RoadBetweenRegion();
 
-        roadBetweenRegion.setFromAddress(fromRegion);
-        roadBetweenRegion.setToAddress(toRegion);
-        roadBetweenRegion.setActive(roadBetweenRegionAddingReqDto.getActive());
+        roadBetweenRegionDirectional.setFromAddress(fromRegion);
+        roadBetweenRegionDirectional.setToAddress(toRegion);
+        roadBetweenRegionDirectional.setIsDirectional(true);
 
-        roadBetweenRegionRepository.save(roadBetweenRegion);
+        roadBetweenRegionNotDirectional.setFromAddress(toRegion);
+        roadBetweenRegionNotDirectional.setToAddress(fromRegion);
+        roadBetweenRegionNotDirectional.setIsDirectional(false);
+
+        roadBetweenRegionRepository.save(roadBetweenRegionDirectional);
+        roadBetweenRegionRepository.save(roadBetweenRegionNotDirectional);
 
     }
 
     private void checkIsExistRoadBetweenRegion(@NotNull Integer fromAddressId, @NotNull Integer toAddressId) {
         if (roadBetweenRegionRepository.checkIsRoadExists(fromAddressId, toAddressId)) {
-            throw new RuntimeException("Road between regions already exists");
+            throw new RoadBetweenRegionAlreadyExistException();
         }
     }
 
-    public void changeActive(RoadBetweenRegionChangeActiveReqDto roadBetweenRegionChangeActiveReqDto) {
 
-        Optional<RoadBetweenRegion> byId = roadBetweenRegionRepository.findById(roadBetweenRegionChangeActiveReqDto.getId());
-        if (byId.isEmpty()) {
-            throw new RuntimeException("Road between regions does not exist");
-        }
-
-        RoadBetweenRegion roadBetweenRegion = byId.get();
-        if (roadBetweenRegion.getActive().booleanValue() == roadBetweenRegionChangeActiveReqDto.getActive().booleanValue()) {
-            return;
-        }
-
-        int i = roadBetweenRegionRepository.changeActive(
-                roadBetweenRegionChangeActiveReqDto.getActive(),
-                roadBetweenRegionChangeActiveReqDto.getId());
-
-        if (i == 0) {
-            throw new RuntimeException("Road active change failed");
-        }
-    }
+//
+//    public void changeActive(RoadBetweenRegionChangeActiveReqDto roadBetweenRegionChangeActiveReqDto) {
+//
+//        Optional<RoadBetweenRegion> byId = roadBetweenRegionRepository.findById(roadBetweenRegionChangeActiveReqDto.getId());
+//        if (byId.isEmpty()) {
+//            throw new RuntimeException("Road between regions does not exist");
+//        }
+//
+//        RoadBetweenRegion roadBetweenRegion = byId.get();
+//
+//
+//        int i = roadBetweenRegionRepository.changeActive(
+//                roadBetweenRegionChangeActiveReqDto.getActive(),
+//                roadBetweenRegionChangeActiveReqDto.getId());
+//
+//        if (i == 0) {
+//            throw new RuntimeException("Road active change failed");
+//        }
+//    }
 
     public RoadBetweenRegionPaginationRespDto getAsPage(Integer page, Integer size) {
 
