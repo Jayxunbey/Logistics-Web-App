@@ -45,7 +45,7 @@ public class RoadTransportService {
 
         Transport transport = transportService.get(roadTransportAddingDto.getTransportId());
 
-        RoadTransport forSaving;
+        RoadTransport forSaving = null;
 
         if (roadBetweenRegion.getIsDirectional()) {
 
@@ -61,7 +61,7 @@ public class RoadTransportService {
                 forSaving.setIsBilateral(roadTransportAddingDto.getIsBilateral());
 
             } else {
-                throw new RoadTransportAlreadyExistsException();
+//                throw new RoadTransportAlreadyExistsException();
             }
 
         } else {
@@ -89,7 +89,7 @@ public class RoadTransportService {
                 }
 
             } else {
-                throw new RoadTransportAlreadyExistsException();
+//                throw new RoadTransportAlreadyExistsException();
             }
 
         }

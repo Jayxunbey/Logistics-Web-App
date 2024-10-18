@@ -56,8 +56,8 @@ public class TransportTypeService {
             return byId.get();
         }
 
-        throw new TransportNotFoundException();
-
+//        throw new TransportNotFoundException();
+return null;
     }
 
     public TransportTypeRespDto findByIdWithForChecked(Integer typeId) {
